@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>我的第一個網頁</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<style>
+    body {
+        background-color: white
+        ;
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        color: black;
+        font-size: 24px;
+    }
+    a {
+        color: blue;
+        font-size: 20px;
+    }
+    p {
+        color: red;
+        font-size: 16px;
+    }
+</style>    
+
+<body>
+    <h1>歡迎來到我的網站</h1>
+    <p>這是一個 HTML 教學範例。</p>
+    <a href="https://www.google.com">前往 Google</a>
+    <br>
+    <a href="https://www.youtube.com">前往 Youtbe</a>
+    
+    <div id="app">
+        <h1>{{ message }}</h1>
+        <button @click="changeMessage">點我改變訊息</button>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    message: "Hello Vue!"
+                };
+            },
+            methods: {
+                changeMessage() {
+                    this.message = "訊息已改變！";
+                }
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>
+
