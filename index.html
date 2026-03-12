@@ -26,7 +26,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -35,6 +35,7 @@
             border-bottom: 3px solid var(--black);
             padding-bottom: 20px;
             margin-bottom: 40px;
+            text-align: center;
         }
 
         header h1 {
@@ -49,21 +50,78 @@
             margin: 0;
         }
 
-        /* 下拉區塊 (手風琴) 設計 */
+        /* CSS Grid 網格佈局 (一列三個) */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        /* 響應式設計：小螢幕時變為單列或雙列 */
+        @media (max-width: 900px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 600px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 卡片設計 */
+        .card {
+            border: 2px solid var(--black);
+            display: flex;
+            flex-direction: column;
+            background-color: var(--white);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 5px 5px 0px var(--black);
+        }
+
+        /* 卡片標題區 (Topic) */
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--black);
+        }
+
+        .card-header h2 {
+            font-size: 1.5rem;
+            margin: 0 0 10px 0;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-header p {
+            font-size: 0.95rem;
+            color: var(--dark-gray);
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* 卡片下拉區塊 (Details) */
         details {
-            border-bottom: 1px solid var(--light-gray);
-            padding: 20px 0;
+            margin-top: auto; /* 將下拉區塊推至卡片底部 */
         }
 
         summary {
-            font-size: 1.25rem;
+            background-color: var(--black);
+            color: var(--white);
+            padding: 15px 20px;
+            font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
+            list-style: none;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            list-style: none;
-            transition: color 0.3s ease;
+            transition: background-color 0.3s ease;
         }
 
         summary::-webkit-details-marker {
@@ -71,14 +129,13 @@
         }
 
         summary:hover {
-            color: var(--gray);
+            background-color: var(--dark-gray);
         }
 
-        /* 利用 CSS 控制展開/收合的加減號 */
+        /* 加減號 Icon */
         summary .icon::after {
             content: '+';
-            font-size: 1.5rem;
-            font-weight: normal;
+            font-size: 1.2rem;
         }
 
         details[open] summary .icon::after {
@@ -87,47 +144,50 @@
 
         /* 展開後的內容區塊 */
         .content {
-            margin-top: 15px;
-            padding-left: 15px;
-            border-left: 3px solid var(--black);
+            padding: 20px;
+            background-color: #fafafa;
+            border-top: 1px solid var(--black);
         }
 
         .desc {
             color: var(--dark-gray);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
         }
 
         /* 連結按鍵 UI */
         .btn-group {
             display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
         a.btn {
-            display: inline-block;
-            padding: 10px 24px;
-            background-color: var(--black);
-            color: var(--white);
+            display: block;
+            text-align: center;
+            padding: 8px 15px;
+            background-color: transparent;
+            color: var(--black);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             letter-spacing: 1px;
             border: 1px solid var(--black);
             transition: all 0.3s ease;
         }
 
         a.btn:hover {
-            background-color: var(--white);
-            color: var(--black);
+            background-color: var(--black);
+            color: var(--white);
         }
 
         /* 圖片特效 */
         img {
             max-width: 100%;
-            border: 1px solid var(--light-gray);
+            height: auto;
+            border: 1px solid var(--black);
             display: block;
-            margin-top: 15px;
+            margin-top: 10px;
             filter: grayscale(100%);
             transition: filter 0.4s ease;
         }
@@ -136,32 +196,41 @@
             filter: grayscale(0%);
         }
 
-        /* Vue 按鈕特殊設計 */
+        /* Vue 區塊特殊設計 */
+        .vue-box {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--gray);
+            text-align: center;
+        }
+
         button.btn-action {
-            background-color: transparent;
-            color: var(--black);
-            border: 2px solid var(--black);
-            padding: 10px 24px;
-            font-size: 1rem;
-            font-weight: bold;
+            background-color: var(--black);
+            color: var(--white);
+            border: none;
+            padding: 8px 16px;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            width: 100%;
         }
 
         button.btn-action:hover {
-            background-color: var(--black);
-            color: var(--white);
+            background-color: var(--gray);
         }
 
         .vue-msg {
-            font-size: 1.5rem;
-            margin-top: 0;
+            font-size: 1.1rem;
+            margin: 0 0 10px 0;
+            color: var(--dark-gray);
         }
 
         /* 尚未有內容的狀態 */
         .empty-state {
             color: var(--gray);
             font-style: italic;
+            text-align: center;
+            padding: 20px;
         }
     </style>
 </head>
@@ -170,75 +239,24 @@
     <div class="container">
         <header>
             <h1>網頁前端設計</h1>
-            <p>課程練習紀錄 | 學生：林楷倫</p>
+            <p>每週課程練習紀錄 | 學生：林楷倫</p>
         </header>
 
-        <details open>
-            <summary>02/26 - 基礎 HTML 與外部連結 <span class="icon"></span></summary>
-            <div class="content">
-                <p class="desc">這是一個 HTML 教學範例。學習了基礎標籤、連結外部網站與圖片插入。</p>
-                <div class="btn-group">
-                    <a href="https://www.google.com" target="_blank" class="btn">前往 Google</a>
-                    <a href="https://www.youtube.com" target="_blank" class="btn">前往 YouTube</a>
-                    <a href="about.html" class="btn">關於我們</a>
-                    <a href="https://pages.github.com/" target="_blank" class="btn">參考 GitHub Pages 官方文件</a>
+        <div class="grid-container">
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>02/26</h2>
+                    <p>基礎 HTML 與 Vue.js 互動</p>
                 </div>
-                <img src="https://picsum.photos/200/300" alt="示例圖片">
-            </div>
-        </details>
-
-        <details>
-            <summary>03/05 - 個人檔案連結實作 <span class="icon"></span></summary>
-            <div class="content">
-                <p class="desc">本週練習建立個人檔案頁面導覽與站內連結。</p>
-                <div class="btn-group">
-                    <a href="profile.html" class="btn">個人檔案 (Profile)</a>
-                </div>
-            </div>
-        </details>
-
-        <details>
-            <summary>03/12 - Vue.js 基礎互動 <span class="icon"></span></summary>
-            <div class="content">
-                <p class="desc">本週導入 Vue.js 框架，實作基礎狀態管理與點擊事件綁定。</p>
-                
-                <div id="app">
-                    <h2 class="vue-msg">{{ message }}</h2>
-                    <button @click="changeMessage" class="btn-action">點我改變訊息</button>
-                </div>
-            </div>
-        </details>
-
-        <details><summary>03/19 - 每週練習 <span class="icon"></span></summary><div class="content empty-state"><p>尚無內容</p></div></details>
-        <details><summary>03/26 - 每週練習 <span class="icon"></span></summary><div class="content empty-state"><p>尚無內容</p></div></details>
-        <details><summary>04/02 - 每週練習 <span class="icon"></span></summary><div class="content empty-state"><p>尚無內容</p></div></details>
-        <details><summary>04/09 - 每週練習 <span class="icon"></span></summary><div class="content empty-state"><p>尚無內容</p></div></details>
-        <details><summary>04/16 - 每週練習 <span class="icon"></span></summary><div class="content empty-state"><p>尚無內容</p></div></details>
-        <details><summary>04/23 - 每週練習 <span class="icon"></span></summary><div class="content empty-state"><p>尚無內容</p></div></details>
-        <details><summary>04/30 - 每週練習 <span class="icon"></span></summary><div class="content empty-state"><p>尚無內容</p></div></details>
-        <details><summary>05/07 - 每週練習 <span class="icon"></span></summary><div class="content empty-state"><p>尚無內容</p></div></details>
-        <details><summary>05/14 - 每週練習 <span class="icon"></span></summary><div class="content empty-state"><p>尚無內容</p></div></details>
-        <details><summary>05/21 - 每週練習 <span class="icon"></span></summary><div class="content empty-state"><p>尚無內容</p></div></details>
-        <details><summary>05/28 - 每週練習 <span class="icon"></span></summary><div class="content empty-state"><p>尚無內容</p></div></details>
-        <details><summary>06/04 - 期末統整 <span class="icon"></span></summary><div class="content empty-state"><p>尚無內容</p></div></details>
-
-    </div>
-
-    <script>
-        const { createApp } = Vue;
-
-        createApp({
-            data() {
-                return {
-                    message: "Hello Vue!"
-                };
-            },
-            methods: {
-                changeMessage() {
-                    this.message = "訊息已改變！狀態更新成功。";
-                }
-            }
-        }).mount("#app");
-    </script>
-</body>
-</html>
+                <details open>
+                    <summary>實作內容與連結 <span class="icon"></span></summary>
+                    <div class="content">
+                        <p class="desc">這是一個 HTML 教學範例。學習了基礎標籤、外部連結，並導入 Vue.js 進行狀態切換測試。</p>
+                        <div class="btn-group">
+                            <a href="https://www.google.com" target="_blank" class="btn">前往 Google</a>
+                            <a href="https://www.youtube.com" target="_blank" class="btn">前往 YouTube</a>
+                            <a href="about.html" class="btn">關於我們</a>
+                            <a href="https://pages.github.com/" target="_blank" class="btn">GitHub Pages 文件</a>
+                        </div>
+                        <img src="https://picsum.photos/200/150" alt="示例圖片">
