@@ -6,231 +6,289 @@
     <title>網頁前端設計 | 林楷倫</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
-        /* CSS 變數設定 */
+        /* CSS 變數：精細的灰階色板 */
         :root {
-            --black: #000000;
-            --dark-gray: #333333;
-            --gray: #888888;
-            --light-gray: #e5e5e5;
+            --black: #111111;
+            --dark-gray: #2b2b2b;
+            --mid-gray: #757575;
+            --light-gray: #e0e0e0;
+            --bg-gray: #f7f7f8;
             --white: #ffffff;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.12);
         }
 
-        /* 全域重置與基礎字體 */
+        /* 全域設定與微小點狀網格背景 */
         body {
-            background-color: var(--white);
+            background-color: var(--bg-gray);
+            background-image: radial-gradient(var(--light-gray) 1px, transparent 1px);
+            background-size: 20px 20px;
             color: var(--black);
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Helvetica Neue', Arial, 'Noto Sans TC', sans-serif;
             margin: 0;
-            padding: 40px 20px;
+            padding: 50px 20px;
             line-height: 1.6;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
-        /* 頂部標題區塊 */
+        /* 頂部標題區塊：強調粗體與線條 */
         header {
-            border-bottom: 3px solid var(--black);
-            padding-bottom: 20px;
-            margin-bottom: 40px;
-            text-align: center;
+            border-bottom: 4px solid var(--black);
+            padding-bottom: 25px;
+            margin-bottom: 50px;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
         }
 
         header h1 {
-            font-size: 2.5rem;
-            margin: 0 0 5px 0;
+            font-size: 3rem;
+            font-weight: 900;
+            margin: 0;
             letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         header p {
-            color: var(--gray);
+            color: var(--mid-gray);
             font-size: 1.1rem;
+            font-weight: bold;
             margin: 0;
+            letter-spacing: 1px;
         }
 
-        /* CSS Grid 網格佈局 (一列三個) */
+        /* CSS Grid 網格佈局 */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
+            gap: 30px;
         }
 
-        /* 響應式設計：小螢幕時變為單列或雙列 */
-        @media (max-width: 900px) {
-            .grid-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (max-width: 600px) {
-            .grid-container {
-                grid-template-columns: 1fr;
-            }
+        /* 響應式 */
+        @media (max-width: 900px) { .grid-container { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 650px) { 
+            .grid-container { grid-template-columns: 1fr; } 
+            header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            header h1 { font-size: 2.2rem; }
         }
 
-        /* 卡片設計 */
+        /* 卡片設計：質感陰影與頂部粗線 */
         .card {
-            border: 2px solid var(--black);
+            background-color: var(--white);
+            border: 1px solid var(--light-gray);
+            border-top: 5px solid var(--black);
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
             display: flex;
             flex-direction: column;
-            background-color: var(--white);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            overflow: hidden;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 5px 5px 0px var(--black);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
         }
 
-        /* 卡片標題區 (Topic) */
+        /* 卡片頭部 (Topic) */
         .card-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--black);
+            padding: 25px 20px 20px;
+            border-bottom: 1px solid var(--light-gray);
+            background-color: var(--white);
         }
 
         .card-header h2 {
-            font-size: 1.5rem;
-            margin: 0 0 10px 0;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin: 0 0 5px 0;
+            color: var(--black);
+            line-height: 1;
         }
 
         .card-header p {
             font-size: 0.95rem;
-            color: var(--dark-gray);
-            font-weight: bold;
+            color: var(--mid-gray);
+            font-weight: 600;
             margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* 卡片下拉區塊 (Details) */
+        /* 卡片下拉區塊 (Details & Summary) */
         details {
-            margin-top: auto; /* 將下拉區塊推至卡片底部 */
+            margin-top: auto;
+            background-color: #fafafa;
         }
 
         summary {
-            background-color: var(--black);
-            color: var(--white);
-            padding: 15px 20px;
-            font-size: 1rem;
+            padding: 18px 20px;
+            font-size: 0.95rem;
             font-weight: bold;
+            color: var(--dark-gray);
             cursor: pointer;
             list-style: none;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: background-color 0.3s ease;
+            border-top: 1px solid transparent;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        summary::-webkit-details-marker {
-            display: none; /* 隱藏預設三角形 */
-        }
+        summary::-webkit-details-marker { display: none; }
 
         summary:hover {
-            background-color: var(--dark-gray);
+            background-color: var(--light-gray);
+            color: var(--black);
         }
 
-        /* 加減號 Icon */
+        /* 加減號 Icon 變更為箭頭 */
         summary .icon::after {
-            content: '+';
+            content: '↓';
             font-size: 1.2rem;
+            transition: transform 0.3s ease;
         }
 
         details[open] summary .icon::after {
-            content: '-';
+            transform: rotate(180deg);
+        }
+
+        details[open] summary {
+            background-color: var(--black);
+            color: var(--white);
+            border-top: 1px solid var(--black);
+        }
+
+        /* 🌟 下拉展開動畫：淡入與滑動 */
+        details[open] summary ~ * {
+            animation: slideFadeDown 0.4s ease-out forwards;
+        }
+
+        @keyframes slideFadeDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* 展開後的內容區塊 */
         .content {
             padding: 20px;
-            background-color: #fafafa;
-            border-top: 1px solid var(--black);
+            background-color: var(--white);
+            border-top: 1px solid var(--light-gray);
         }
 
         .desc {
             color: var(--dark-gray);
-            margin-bottom: 15px;
-            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.7;
         }
 
-        /* 連結按鍵 UI */
+        /* 連結按鍵 UI：框線與實心切換 */
         .btn-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
         a.btn {
             display: block;
             text-align: center;
-            padding: 8px 15px;
+            padding: 10px 15px;
             background-color: transparent;
             color: var(--black);
             text-decoration: none;
             font-size: 0.85rem;
+            font-weight: bold;
             letter-spacing: 1px;
-            border: 1px solid var(--black);
-            transition: all 0.3s ease;
+            border: 2px solid var(--black);
+            border-radius: 4px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         a.btn:hover {
             background-color: var(--black);
             color: var(--white);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         /* 圖片特效 */
         img {
             max-width: 100%;
             height: auto;
-            border: 1px solid var(--black);
+            border-radius: 4px;
             display: block;
-            margin-top: 10px;
-            filter: grayscale(100%);
-            transition: filter 0.4s ease;
+            margin-top: 15px;
+            filter: grayscale(100%) contrast(1.2);
+            transition: filter 0.5s ease;
         }
 
         img:hover {
-            filter: grayscale(0%);
+            filter: grayscale(0%) contrast(1);
         }
 
-        /* Vue 區塊特殊設計 */
+        /* Vue 區塊特殊設計：深灰底色 */
         .vue-box {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px dashed var(--gray);
+            margin-top: 20px;
+            padding: 20px;
+            background-color: var(--bg-gray);
+            border-radius: 6px;
+            border: 1px solid var(--light-gray);
             text-align: center;
+        }
+
+        .vue-msg {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 0 0 15px 0;
+            color: var(--black);
         }
 
         button.btn-action {
             background-color: var(--black);
             color: var(--white);
             border: none;
-            padding: 8px 16px;
+            border-radius: 4px;
+            padding: 10px 20px;
             font-size: 0.9rem;
+            font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s, transform 0.2s;
             width: 100%;
         }
 
         button.btn-action:hover {
-            background-color: var(--gray);
+            background-color: var(--dark-gray);
+            transform: scale(1.02);
         }
 
-        .vue-msg {
-            font-size: 1.1rem;
-            margin: 0 0 10px 0;
-            color: var(--dark-gray);
+        button.btn-action:active {
+            transform: scale(0.98);
         }
 
         /* 尚未有內容的狀態 */
         .empty-state {
-            color: var(--gray);
-            font-style: italic;
+            color: var(--mid-gray);
+            font-size: 0.9rem;
             text-align: center;
-            padding: 20px;
+            padding: 30px 20px;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                #f0f0f0 10px,
+                #f0f0f0 20px
+            );
         }
     </style>
 </head>
@@ -238,8 +296,8 @@
 
     <div class="container">
         <header>
-            <h1>網頁前端設計</h1>
-            <p>每週課程練習紀錄 | 學生：林楷倫</p>
+            <h1>FRONTEND<br>DESIGN</h1>
+            <p>STUDENT // 林楷倫</p>
         </header>
 
         <div class="grid-container">
@@ -247,16 +305,97 @@
             <div class="card">
                 <div class="card-header">
                     <h2>02/26</h2>
-                    <p>基礎 HTML 與 Vue.js 互動</p>
+                    <p>基礎 HTML & Vue.js</p>
                 </div>
                 <details open>
-                    <summary>實作內容與連結 <span class="icon"></span></summary>
+                    <summary>實作內容 <span class="icon"></span></summary>
                     <div class="content">
-                        <p class="desc">這是一個 HTML 教學範例。學習了基礎標籤、外部連結，並導入 Vue.js 進行狀態切換測試。</p>
+                        <p class="desc">學習基礎標籤、外部連結，並初步導入 Vue.js 進行狀態切換測試。</p>
                         <div class="btn-group">
                             <a href="https://www.google.com" target="_blank" class="btn">前往 Google</a>
                             <a href="https://www.youtube.com" target="_blank" class="btn">前往 YouTube</a>
                             <a href="about.html" class="btn">關於我們</a>
                             <a href="https://pages.github.com/" target="_blank" class="btn">GitHub Pages 文件</a>
                         </div>
-                        <img src="https://picsum.photos/200/150" alt="示例圖片">
+                        <img src="https://picsum.photos/400/250" alt="示例圖片">
+                        
+                        <div id="app" class="vue-box">
+                            <h3 class="vue-msg">{{ message }}</h3>
+                            <button @click="changeMessage" class="btn-action">觸發狀態變更</button>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>03/05</h2>
+                    <p>個人檔案連結實作</p>
+                </div>
+                <details>
+                    <summary>實作內容 <span class="icon"></span></summary>
+                    <div class="content">
+                        <p class="desc">本週練習建立個人檔案頁面導覽與站內連結。</p>
+                        <div class="btn-group">
+                            <a href="profile.html" class="btn">個人檔案 (Profile)</a>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>03/12</h2>
+                    <p>每週練習主題</p>
+                </div>
+                <details>
+                    <summary>實作內容 <span class="icon"></span></summary>
+                    <div class="content empty-state">
+                        尚無內容 DATA PENDING
+                    </div>
+                </details>
+            </div>
+
+            <script>
+                const gridContainer = document.querySelector('.grid-container');
+                const futureDates = ['03/19', '03/26', '04/02', '04/09', '04/16', '04/23', '04/30', '05/07', '05/14', '05/21', '05/28', '06/04'];
+                
+                futureDates.forEach(date => {
+                    const topic = date === '06/04' ? '期末統整與專題' : '每週練習主題';
+                    const cardHTML = `
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>${date}</h2>
+                                <p>${topic}</p>
+                            </div>
+                            <details>
+                                <summary>實作內容 <span class="icon"></span></summary>
+                                <div class="content empty-state">尚無內容 DATA PENDING</div>
+                            </details>
+                        </div>
+                    `;
+                    gridContainer.insertAdjacentHTML('beforeend', cardHTML);
+                });
+            </script>
+
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    message: "SYSTEM STANDBY: Hello Vue!"
+                };
+            },
+            methods: {
+                changeMessage() {
+                    this.message = "STATUS UPDATED: 訊息切換成功。";
+                }
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>
