@@ -361,19 +361,61 @@
                 const futureDates = ['03/19', '03/26', '04/02', '04/09', '04/16', '04/23', '04/30', '05/07', '05/14', '05/21', '05/28', '06/04'];
                 
                 futureDates.forEach(date => {
-                    const topic = date === '06/04' ? '期末統整與專題' : '每週練習主題';
-                    const cardHTML = `
-                        <div class="card">
-                            <div class="card-header">
-                                <h2>${date}</h2>
-                                <p>${topic}</p>
+                    let cardHTML;
+                    
+                    if (date === '03/19') {
+                        cardHTML = `
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2>${date}</h2>
+                                    <p>JavaScript 基本概念</p>
+                                </div>
+                                <details open>
+                                    <summary>實作內容 <span class="icon"></span></summary>
+                                    <div class="content">
+                                        <p class="desc">學習 JavaScript 基本語法，第一練習：撰寫函式計算圓的面積，參數為半徑 (radius)。</p>
+                                        <div class="btn-group">
+                                            <a href="javascript:void(0)" class="btn" onclick="exampleCalculateArea()">執行計算範例</a>
+                                        </div>
+                                        <div id="result-box" style="margin-top: 20px; padding: 15px; background-color: #fafafa; border-radius: 4px; border-left: 4px solid #111111; display: none;">
+                                            <strong>計算結果：</strong>
+                                            <p id="result-output" style="margin: 10px 0 0 0; color: #2b2b2b;"></p>
+                                        </div>
+                                        <pre style="background-color: #f5f5f5; padding: 15px; border-radius: 4px; overflow-x: auto; font-size: 0.85rem;">
+<code>// 圓面積計算函式
+function calculateCircleArea(radius) {
+    if (radius < 0) {
+        return '半徑不能為負數';
+    }
+    const area = Math.PI * radius * radius;
+    return area.toFixed(2);
+}
+
+// 使用範例
+const radius = 5;
+const area = calculateCircleArea(radius);
+console.log(\`半徑 \${radius} 的圓面積為: \${area}\`);</code>
+                                        </pre>
+                                    </div>
+                                </details>
                             </div>
-                            <details>
-                                <summary>實作內容 <span class="icon"></span></summary>
-                                <div class="content empty-state">尚無內容 DATA PENDING</div>
-                            </details>
-                        </div>
-                    `;
+                        `;
+                    } else {
+                        const topic = date === '06/04' ? '期末統整與專題' : '每週練習主題';
+                        cardHTML = `
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2>${date}</h2>
+                                    <p>${topic}</p>
+                                </div>
+                                <details>
+                                    <summary>實作內容 <span class="icon"></span></summary>
+                                    <div class="content empty-state">尚無內容 DATA PENDING</div>
+                                </details>
+                            </div>
+                        `;
+                    }
+                    
                     gridContainer.insertAdjacentHTML('beforeend', cardHTML);
                 });
             </script>
@@ -382,6 +424,26 @@
     </div>
 
     <script>
+        // 圓面積計算函式 - 3/19 練習
+        function calculateCircleArea(radius) {
+            if (radius < 0) {
+                return '半徑不能為負數';
+            }
+            const area = Math.PI * radius * radius;
+            return area.toFixed(2);
+        }
+
+        // 執行範例
+        function exampleCalculateArea() {
+            const radius = 5;
+            const area = calculateCircleArea(radius);
+            const resultBox = document.getElementById('result-box');
+            const resultOutput = document.getElementById('result-output');
+            resultOutput.textContent = `半徑 ${radius} 的圓面積為: ${area} 平方單位`;
+            resultBox.style.display = 'block';
+        }
+
+        // Vue 應用
         const { createApp } = Vue;
 
         createApp({
