@@ -44,6 +44,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
+            gap: 20px;
         }
 
         header h1 {
@@ -60,6 +61,27 @@
             font-weight: bold;
             margin: 0;
             letter-spacing: 1px;
+        }
+
+        /* 右上角項目連結 */
+        .project-link-block {
+            display: block;
+            padding: 12px 20px;
+            background-color: var(--black);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .project-link-block:hover {
+            background-color: var(--mid-gray);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         /* CSS Grid 網格佈局 */
@@ -298,6 +320,7 @@
         <header>
             <h1>網站前端技術應用</h1>
             <p>STUDENT // 11128217 林楷倫</p>
+            <a href="project.html" class="project-link-block">✦ 運勢分析 ✦</a>
         </header>
 
         <div class="grid-container">

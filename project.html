@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>運勢分析 | 神秘占卜</title>
+    <style>
+        /* ========== 顏色變數與基礎設定 ========== */
+        :root {
+            --primary-purple: #6b2d7f;
+            --dark-purple: #3d1a4d;
+            --light-purple: #8b4fa8;
+            --gold: #d4af37;
+            --dark-black: #0a0a0a;
+            --silver: #c0c0c0;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--dark-black);
+            color: var(--white);
+            font-family: 'Microsoft JhengHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ========== 星空背景動畫 ========== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(107, 45, 127, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        /* 星星效果 */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, var(--gold), rgba(212, 175, 55, 0)),
+                radial-gradient(2px 2px at 60px 70px, var(--white), rgba(255, 255, 255, 0)),
+                radial-gradient(1px 1px at 50px 50px, var(--white), rgba(255, 255, 255, 0)),
+                radial-gradient(1px 1px at 130px 80px, var(--silver), rgba(192, 192, 192, 0)),
+                radial-gradient(2px 2px at 90px 10px, var(--white), rgba(255, 255, 255, 0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: twinkleStar 4s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes twinkleStar {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* ========== 容器與佈局 ========== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========== 頭部設計 ========== */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 4rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.8),
+                         0 0 40px rgba(107, 45, 127, 0.5);
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 0 0 40px rgba(107, 45, 127, 0.5); }
+            50% { text-shadow: 0 0 30px rgba(212, 175, 55, 1), 0 0 60px rgba(107, 45, 127, 0.8); }
+        }
+
+        header p {
+            font-size: 1.3rem;
+            color: var(--light-purple);
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+
+        /* 裝飾線條 */
+        .header-divider {
+            width: 150px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .header-divider::before,
+        .header-divider::after {
+            content: '✦';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
+        .header-divider::before { left: -30px; }
+        .header-divider::after { right: -30px; }
+
+        /* ========== 主選擇區域 ========== */
+        .main-view {
+            display: grid;
+            gap: 40px;
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        /* ========== 卡片設計 ========== */
+        .card {
+            background: linear-gradient(135deg, rgba(107, 45, 127, 0.3) 0%, rgba(61, 26, 77, 0.5) 100%);
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* 不規則幾何背景 */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -50%;
+            width: 250px;
+            height: 250px;
+            background: conic-gradient(from 45deg, var(--primary-purple) 0deg, transparent 180deg);
+            animation: rotate 8s linear infinite;
+            z-index: 0;
+        }
+
+        .card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.6),
+                        0 0 80px rgba(107, 45, 127, 0.4),
+                        inset 0 0 20px rgba(212, 175, 55, 0.1);
+            border-color: var(--gold);
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+        }
+
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .card h2 {
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .card p {
+            color: var(--silver);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* ========== 動畫 ========== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(30px); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ========== 詳細視圖 ========== */
+        .detail-view {
+            display: none;
+        }
+
+        .detail-view.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 返回按鈕 */
+        .back-btn {
+            background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple));
+            color: var(--gold);
+            border: 2px solid var(--gold);
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+            background: linear-gradient(135deg, var(--dark-purple), var(--primary-purple));
+        }
+
+        /* ========== 表單設計 ========== */
+        .form-container {
+            background: linear-gradient(135deg, rgba(107, 45, 127, 0.2) 0%, rgba(61, 26, 77, 0.4) 100%);
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--gold);
+            font-weight: bold;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--light-purple);
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group select option {
+            background-color: var(--dark-purple);
+            color: var(--white);
+        }
+
+        /* ========== 提交按鈕 ========== */
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--gold), #e6c200);
+            color: var(--dark-black);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.6),
+                        0 5px 20px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(135deg, #e6c200, var(--gold));
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* ========== 結果顯示區 ========== */
+        .result-box {
+            background: linear-gradient(135deg, rgba(107, 45, 127, 0.3) 0%, rgba(61, 26, 77, 0.5) 100%);
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-box h2 {
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-size: 2rem;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+        }
+
+        .result-content {
+            color: var(--silver);
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        .result-content p {
+            margin-bottom: 15px;
+            border-left: 4px solid var(--gold);
+            padding-left: 15px;
+        }
+
+        /* ========== 標題設計 ========== */
+        .detail-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .detail-title h1 {
+            font-size: 3rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .detail-title .subtitle {
+            color: var(--light-purple);
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        /* ========== 響應式設計 ========== */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .method-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                min-height: 250px;
+            }
+
+            .card-icon {
+                font-size: 3rem;
+            }
+
+            .form-container {
+                padding: 25px;
+            }
+
+            .detail-title h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* ========== 裝飾元素 ========== */
+        .decoration {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .decoration-circle {
+            width: 300px;
+            height: 300px;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+            border-radius: 50%;
+            position: absolute;
+            top: 10%;
+            right: 5%;
+            animation: rotate 20s linear infinite;
+            z-index: 0;
+        }
+
+        .decoration-triangle {
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 260px solid rgba(107, 45, 127, 0.15);
+            position: absolute;
+            bottom: 20%;
+            left: 5%;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration decoration-circle"></div>
+    <div class="decoration decoration-triangle"></div>
+
+    <div class="container">
+        <!-- 主視圖 -->
+        <div id="mainView" class="main-view">
+            <header>
+                <h1>✦ 神秘 占 卜 ✦</h1>
+                <p>探索命運的奧秘，洞悉人生的方向</p>
+                <div class="header-divider"></div>
+            </header>
+
+            <div class="method-grid">
+                <!-- 塔羅 -->
+                <div class="card" onclick="switchView('tarot')">
+                    <div class="card-content">
+                        <span class="card-icon">🔮</span>
+                        <h2>塔羅牌</h2>
+                        <p>利用古老的塔羅牌陣，解讀你的過去、現在與未來，洞察內心真實的聲音。</p>
+                    </div>
+                </div>
+
+                <!-- 星座 -->
+                <div class="card" onclick="switchView('zodiac')">
+                    <div class="card-content">
+                        <span class="card-icon">⭐</span>
+                        <h2>星座運勢</h2>
+                        <p>根據西方占星學，分析你的星座特質，預測近期運勢與人生方向。</p>
+                    </div>
+                </div>
+
+                <!-- 八卦 -->
+                <div class="card" onclick="switchView('bagua')">
+                    <div class="card-content">
+                        <span class="card-icon">☯️</span>
+                        <h2>易經八卦</h2>
+                        <p>運用中國古代智慧的易經八卦，解讀天地人三才之道，預測吉凶禍福。</p>
+                    </div>
+                </div>
+
+                <!-- 生辰八字 -->
+                <div class="card" onclick="switchView('bazi')">
+                    <div class="card-content">
+                        <span class="card-icon">📅</span>
+                        <h2>生辰八字</h2>
+                        <p>根據出生年月日時的天干地支，推測個人命格、運勢與人生軌跡。</p>
+                    </div>
+                </div>
+
+                <!-- 生肖 -->
+                <div class="card" onclick="switchView('zodiacAnimal')">
+                    <div class="card-content">
+                        <span class="card-icon">🐉</span>
+                        <h2>生肖運勢</h2>
+                        <p>東方十二生肖的智慧，解讀你的性格特質與今年的運勢發展。</p>
+                    </div>
+                </div>
+
+                <!-- 姓名學 -->
+                <div class="card" onclick="switchView('numerology')">
+                    <div class="card-content">
+                        <span class="card-icon">🔤</span>
+                        <h2>姓名數字學</h2>
+                        <p>通過你的大名筆畫與字義，分析隱藏在名字中的人生密碼。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 塔羅牌分析詳細視圖 -->
+        <div id="tarotView" class="detail-view">
+            <button class="back-btn" onclick="switchView('main')">← 返回選單</button>
+            <div class="detail-title">
+                <h1>🔮 塔羅牌分析</h1>
+                <p class="subtitle">古老的智慧，揭示你的命運之路</p>
+            </div>
+
+            <div class="form-container">
+                <form id="tarotForm">
+                    <div class="form-group">
+                        <label>你的名字</label>
+                        <input type="text" placeholder="請輸入你的名字" required>
+                    </div>
+                    <div class="form-group">
+                        <label>出生日期</label>
+                        <input type="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>你的問題</label>
+                        <input type="text" placeholder="請輸入想要詢問的問題" required>
+                    </div>
+                    <div class="form-group">
+                        <label>選擇牌陣</label>
+                        <select required>
+                            <option value="">-- 選擇牌陣 --</option>
+                            <option value="three">三牌陣 (過去/現在/未來)</option>
+                            <option value="celtic">凱爾特十字</option>
+                            <option value="single">單牌抽籤</option>
+                            <option value="love">愛情五牌陣</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="submit-btn">開始占卜</button>
+                </form>
+                <div id="tarotResult" class="result-box">
+                    <h2>✦ 塔羅占卜結果 ✦</h2>
+                    <div class="result-content" id="tarotResultContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 星座運勢詳細視圖 -->
+        <div id="zodiacView" class="detail-view">
+            <button class="back-btn" onclick="switchView('main')">← 返回選單</button>
+            <div class="detail-title">
+                <h1>⭐ 星座運勢分析</h1>
+                <p class="subtitle">星星的低語，預示著你的未來</p>
+            </div>
+
+            <div class="form-container">
+                <form id="zodiacForm">
+                    <div class="form-group">
+                        <label>你的名字</label>
+                        <input type="text" placeholder="請輸入你的名字" required>
+                    </div>
+                    <div class="form-group">
+                        <label>選擇你的星座</label>
+                        <select required>
+                            <option value="">-- 選擇星座 --</option>
+                            <option value="aries">白羊座 (3/21 - 4/19)</option>
+                            <option value="taurus">金牛座 (4/20 - 5/20)</option>
+                            <option value="gemini">雙子座 (5/21 - 6/20)</option>
+                            <option value="cancer">巨蟹座 (6/21 - 7/22)</option>
+                            <option value="leo">獅子座 (7/23 - 8/22)</option>
+                            <option value="virgo">處女座 (8/23 - 9/22)</option>
+                            <option value="libra">天秤座 (9/23 - 10/22)</option>
+                            <option value="scorpio">天蠍座 (10/23 - 11/21)</option>
+                            <option value="sagittarius">射手座 (11/22 - 12/21)</option>
+                            <option value="capricorn">摩羯座 (12/22 - 1/19)</option>
+                            <option value="aquarius">水瓶座 (1/20 - 2/18)</option>
+                            <option value="pisces">雙魚座 (2/19 - 3/20)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>分析時間範圍</label>
+                        <select required>
+                            <option value="">-- 選擇時間 --</option>
+                            <option value="week">本週運勢</option>
+                            <option value="month">本月運勢</option>
+                            <option value="year">今年運勢</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="submit-btn">查看運勢</button>
+                </form>
+                <div id="zodiacResult" class="result-box">
+                    <h2>✦ 星座運勢 ✦</h2>
+                    <div class="result-content" id="zodiacResultContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 易經八卦詳細視圖 -->
+        <div id="baguaView" class="detail-view">
+            <button class="back-btn" onclick="switchView('main')">← 返回選單</button>
+            <div class="detail-title">
+                <h1>☯️ 易經八卦分析</h1>
+                <p class="subtitle">天地自然之理，萬物化育之智</p>
+            </div>
+
+            <div class="form-container">
+                <form id="baguaForm">
+                    <div class="form-group">
+                        <label>你的名字</label>
+                        <input type="text" placeholder="請輸入你的名字" required>
+                    </div>
+                    <div class="form-group">
+                        <label>出生日期</label>
+                        <input type="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>請選擇你的問題方向</label>
+                        <select required>
+                            <option value="">-- 選擇問題方向 --</option>
+                            <option value="career">事業發展</option>
+                            <option value="love">感情婚配</option>
+                            <option value="wealth">財運象徵</option>
+                            <option value="health">健康平安</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="submit-btn">卜算八卦</button>
+                </form>
+                <div id="baguaResult" class="result-box">
+                    <h2>✦ 八卦卜象 ✦</h2>
+                    <div class="result-content" id="baguaResultContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 生辰八字詳細視圖 -->
+        <div id="baziView" class="detail-view">
+            <button class="back-btn" onclick="switchView('main')">← 返回選單</button>
+            <div class="detail-title">
+                <h1>📅 生辰八字分析</h1>
+                <p class="subtitle">天干地支的奧秘，命運的篇章</p>
+            </div>
+
+            <div class="form-container">
+                <form id="baziForm">
+                    <div class="form-group">
+                        <label>你的名字</label>
+                        <input type="text" placeholder="請輸入你的名字" required>
+                    </div>
+                    <div class="form-group">
+                        <label>出生年月日時</label>
+                        <input type="datetime-local" required>
+                    </div>
+                    <div class="form-group">
+                        <label>性別</label>
+                        <select required>
+                            <option value="">-- 選擇性別 --</option>
+                            <option value="male">男</option>
+                            <option value="female">女</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>出生地</label>
+                        <input type="text" placeholder="例：台灣台北" required>
+                    </div>
+                    <button type="submit" class="submit-btn">推算命格</button>
+                </form>
+                <div id="baziResult" class="result-box">
+                    <h2>✦ 八字命格 ✦</h2>
+                    <div class="result-content" id="baziResultContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 生肖運勢詳細視圖 -->
+        <div id="zodiacAnimalView" class="detail-view">
+            <button class="back-btn" onclick="switchView('main')">← 返回選單</button>
+            <div class="detail-title">
+                <h1>🐉 生肖運勢分析</h1>
+                <p class="subtitle">十二生肖的智慧傳承</p>
+            </div>
+
+            <div class="form-container">
+                <form id="zodiacAnimalForm">
+                    <div class="form-group">
+                        <label>你的名字</label>
+                        <input type="text" placeholder="請輸入你的名字" required>
+                    </div>
+                    <div class="form-group">
+                        <label>選擇你的生肖</label>
+                        <select required>
+                            <option value="">-- 選擇生肖 --</option>
+                            <option value="rat">鼠 (子年)</option>
+                            <option value="ox">牛 (丑年)</option>
+                            <option value="tiger">虎 (寅年)</option>
+                            <option value="rabbit">兔 (卯年)</option>
+                            <option value="dragon">龍 (辰年)</option>
+                            <option value="snake">蛇 (巳年)</option>
+                            <option value="horse">馬 (午年)</option>
+                            <option value="goat">羊 (未年)</option>
+                            <option value="monkey">猴 (申年)</option>
+                            <option value="rooster">雞 (酉年)</option>
+                            <option value="dog">狗 (戌年)</option>
+                            <option value="pig">豬 (亥年)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>分析年份</label>
+                        <select required>
+                            <option value="">-- 選擇年份 --</option>
+                            <option value="2024">2024 年</option>
+                            <option value="2025">2025 年</option>
+                            <option value="2026">2026 年</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="submit-btn">查看生肖運勢</button>
+                </form>
+                <div id="zodiacAnimalResult" class="result-box">
+                    <h2>✦ 生肖運勢 ✦</h2>
+                    <div class="result-content" id="zodiacAnimalResultContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 姓名數字學詳細視圖 -->
+        <div id="numerologyView" class="detail-view">
+            <button class="back-btn" onclick="switchView('main')">← 返回選單</button>
+            <div class="detail-title">
+                <h1>🔤 姓名數字學分析</h1>
+                <p class="subtitle">名字中的命運密碼</p>
+            </div>
+
+            <div class="form-container">
+                <form id="numerologyForm">
+                    <div class="form-group">
+                        <label>你的姓名 (中文)</label>
+                        <input type="text" placeholder="請輸入你的中文姓名" required>
+                    </div>
+                    <div class="form-group">
+                        <label>出生日期</label>
+                        <input type="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>性別</label>
+                        <select required>
+                            <option value="">-- 選擇性別 --</option>
+                            <option value="male">男</option>
+                            <option value="female">女</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="submit-btn">分析姓名</button>
+                </form>
+                <div id="numerologyResult" class="result-box">
+                    <h2>✦ 姓名數字密碼 ✦</h2>
+                    <div class="result-content" id="numerologyResultContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="analyze.js"></script>
+</body>
+</html>
