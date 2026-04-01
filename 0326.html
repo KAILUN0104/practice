@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0326 實作內容 - 多頁面展示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f7f7f8;
+            font-family: 'Helvetica Neue', Arial, 'Noto Sans TC', sans-serif;
+            color: #111111;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 導航選項卡 */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            background-color: transparent;
+            border: 2px solid #757575;
+            border-bottom: none;
+            border-radius: 6px 6px 0 0;
+            cursor: pointer;
+            font-weight: bold;
+            color: #757575;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-tab:hover {
+            background-color: #e0e0e0;
+            color: #111111;
+        }
+
+        .nav-tab.active {
+            background-color: #111111;
+            color: #ffffff;
+            border-color: #111111;
+        }
+
+        /* iframe 容器 */
+        .iframe-container {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            min-height: 600px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            min-height: 600px;
+        }
+
+        /* 標題 */
+        .page-title {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 30px;
+            color: #111111;
+            letter-spacing: 1px;
+        }
+
+        /* 內容分區 */
+        .content-section {
+            margin-top: 20px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111111;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #111111;
+        }
+
+        /* 代碼塊 */
+        .code-block {
+            background-color: #f5f5f5;
+            border-left: 5px solid #6366F1;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .code-header {
+            background-color: #6366F1;
+            color: #ffffff;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .code-content {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            margin: 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            border-radius: 0 0 6px 6px;
+        }
+
+        /* 輸出塊 */
+        .output-block {
+            background-color: #f0f8ff;
+            border-left: 5px solid #10B981;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .output-header {
+            background-color: #10B981;
+            color: #ffffff;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .output-content {
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        .output-content p {
+            margin: 12px 0;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #111111;
+        }
+
+        .explain {
+            color: #757575;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        /* 解釋塊 */
+        .explanation-block {
+            background-color: #fef3c7;
+            border-left: 5px solid #F59E0B;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .explanation-header {
+            background-color: #F59E0B;
+            color: #ffffff;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .explanation-content {
+            padding: 20px;
+            background-color: #ffffff;
+            list-style-position: inside;
+        }
+
+        .explanation-content li {
+            margin: 15px 0;
+            color: #111111;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Modal 彈窗樣式 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 95vw;
+            max-height: 95vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #111111 0%, #2b2b2b 100%);
+            color: #ffffff;
+            border-radius: 12px 12px 0 0;
+            position: sticky;
+            top: 0;
+            z-index: 10000;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .modal-close-btn {
+            background-color: transparent;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close-btn:hover {
+            background-color: #e74c3c;
+            border-color: #e74c3c;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        /* 展開按鈕 */
+        .expand-btn {
+            display: inline-block;
+            background-color: #111111;
+            color: #ffffff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .expand-btn:hover {
+            background-color: #2b2b2b;
+            transform: scale(1.05);
+        }
+
+        /* 響應式 */
+        @media (max-width: 650px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .nav-tab {
+                width: 100%;
+                border-radius: 6px;
+                border-bottom: 2px solid #757575;
+            }
+
+            .nav-tab.active {
+                border-bottom: 2px solid #111111;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .iframe-container {
+                min-height: 400px;
+            }
+
+            iframe {
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">0326 實作內容</h1>
+        
+        <button class="expand-btn" onclick="openModal()">🔍 展開全屏</button>
+
+        <div class="content-section">
+            <h2 class="section-title">本週練習一：同步與非同步 (預測輸出順序)</h2>
+
+            <div class="code-block">
+                <div class="code-header">📝 JavaScript 代碼</div>
+                <pre class="code-content">console.log("🐱 貓")
+
+setTimeout(function() {
+  console.log("🐶 狗")
+}, 1000)
+
+setTimeout(function() {
+  console.log("🐰 兔")
+}, 0)
+
+console.log("🐟 魚")</pre>
+            </div>
+
+            <div class="output-block">
+                <div class="output-header">🎯 預測輸出順序</div>
+                <div class="output-content">
+                    <p><strong>第 1 行：</strong> 🐱 貓 <span class="explain">(同步執行)</span></p>
+                    <p><strong>第 2 行：</strong> 🐟 魚 <span class="explain">(同步執行)</span></p>
+                    <p><strong>第 3 行：</strong> 🐰 兔 <span class="explain">(非同步，setTimeout 0ms)</span></p>
+                    <p><strong>第 4 行：</strong> 🐶 狗 <span class="explain">(非同步，setTimeout 1000ms)</span></p>
+                </div>
+            </div>
+
+            <div class="explanation-block">
+                <div class="explanation-header">💡 解釋</div>
+                <ul class="explanation-content">
+                    <li><strong>同步代碼：</strong> console.log("🐱 貓") 和 console.log("🐟 魚") 會立即執行</li>
+                    <li><strong>setTimeout 宏任務隊列：</strong> 所有同步代碼執行完後才會進入事件循環</li>
+                    <li><strong>setTimeout(0)：</strong> 即使延遲為 0，也會被推入任務隊列，在同步代碼之後執行</li>
+                    <li><strong>執行順序優先級：</strong> 同步代碼 → 微任務隊列 → 宏任務隊列 (按時間順序)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 彈窗 -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2>0326 實作內容 - 全屏展示</h2>
+                <button class="modal-close-btn" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="content-section">
+                    <h2 class="section-title">本週練習一：同步與非同步 (預測輸出順序)</h2>
+
+                    <div class="code-block">
+                        <div class="code-header">📝 JavaScript 代碼</div>
+                        <pre class="code-content">console.log("🐱 貓")
+
+setTimeout(function() {
+  console.log("🐶 狗")
+}, 1000)
+
+setTimeout(function() {
+  console.log("🐰 兔")
+}, 0)
+
+console.log("🐟 魚")</pre>
+                    </div>
+
+                    <div class="output-block">
+                        <div class="output-header">🎯 預測輸出順序</div>
+                        <div class="output-content">
+                            <p><strong>第 1 行：</strong> 🐱 貓 <span class="explain">(同步執行)</span></p>
+                            <p><strong>第 2 行：</strong> 🐟 魚 <span class="explain">(同步執行)</span></p>
+                            <p><strong>第 3 行：</strong> 🐰 兔 <span class="explain">(非同步，setTimeout 0ms)</span></p>
+                            <p><strong>第 4 行：</strong> 🐶 狗 <span class="explain">(非同步，setTimeout 1000ms)</span></p>
+                        </div>
+                    </div>
+
+                    <div class="explanation-block">
+                        <div class="explanation-header">💡 解釋</div>
+                        <ul class="explanation-content">
+                            <li><strong>同步代碼：</strong> console.log("🐱 貓") 和 console.log("🐟 魚") 會立即執行</li>
+                            <li><strong>setTimeout 宏任務隊列：</strong> 所有同步代碼執行完後才會進入事件循環</li>
+                            <li><strong>setTimeout(0)：</strong> 即使延遲為 0，也會被推入任務隊列，在同步代碼之後執行</li>
+                            <li><strong>執行順序優先級：</strong> 同步代碼 → 微任務隊列 → 宏任務隊列 (按時間順序)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('modalOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden'; // 防止背景滾動
+        }
+
+        function closeModal(event) {
+            // 如果點擊的是背景則關閉，或者是關閉按鈕
+            if (event && event.target.id !== 'modalOverlay') return;
+            
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.body.style.overflow = 'auto'; // 恢復背景滾動
+        }
+
+        // 按 Esc 鍵關閉 modal
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
