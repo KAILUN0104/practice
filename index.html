@@ -31,16 +31,15 @@
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* 頂部標題區塊：強調粗體與線條 */
+        /* 頂部標題區塊 */
         header {
             border-bottom: 4px solid var(--black);
             padding-bottom: 25px;
-            margin-bottom: 50px;
-            text-align: left;
+            margin-bottom: 40px;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
@@ -48,7 +47,7 @@
         }
 
         header h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 900;
             margin: 0;
             letter-spacing: 2px;
@@ -63,7 +62,6 @@
             letter-spacing: 1px;
         }
 
-        /* 右上角項目連結 */
         .project-link-block {
             display: block;
             padding: 12px 20px;
@@ -84,859 +82,345 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        /* 時間軸佈局：兩欄設計 */
-        .grid-container {
+        /* =========================================
+           方案一：側邊欄與主要內容區塊佈局 (Flexbox)
+           ========================================= */
+        .app-layout {
             display: flex;
-            gap: 30px;
-            min-height: 600px;
+            gap: 40px;
+            align-items: flex-start;
         }
 
-        /* 左側日期列表 */
-        .timeline-sidebar {
-            width: 240px;
+        /* 左側選單 */
+        .sidebar {
+            flex: 0 0 260px; /* 固定寬度 260px */
             background-color: var(--white);
             border: 1px solid var(--light-gray);
+            border-top: 5px solid var(--black);
             border-radius: 8px;
-            overflow-y: auto;
+            padding: 20px 15px;
             box-shadow: var(--shadow-sm);
-            flex-shrink: 0;
+            position: sticky;
+            top: 50px; /* 捲動時固定在畫面上方 */
         }
 
-        .timeline-item {
-            padding: 16px 18px;
-            border-bottom: 1px solid var(--light-gray);
+        .sidebar-title {
+            font-size: 0.9rem;
+            color: var(--mid-gray);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            font-weight: 800;
+        }
+
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-item {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--dark-gray);
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .timeline-item:last-child {
-            border-bottom: none;
+        .menu-item:hover {
+            background-color: var(--light-gray);
         }
 
-        .timeline-item:hover {
-            background-color: var(--bg-gray);
-            padding-left: 22px;
-        }
-
-        .timeline-item.active {
+        .menu-item.active {
             background-color: var(--black);
             color: var(--white);
-            border-left-color: var(--white);
         }
 
-        .timeline-date {
-            font-size: 1.1rem;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 4px;
+        .menu-item .date {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
         }
 
-        .timeline-topic {
-            font-size: 0.75rem;
-            opacity: 0.8;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* 右側內容顯示區 */
-        .content-main {
+        /* 右側主要內容區 */
+        .main-content {
             flex: 1;
             background-color: var(--white);
             border: 1px solid var(--light-gray);
             border-radius: 8px;
-            padding: 35px;
-            overflow-y: auto;
+            padding: 40px;
             box-shadow: var(--shadow-sm);
+            min-height: 500px;
+            animation: fadeIn 0.4s ease-out; /* 內容切換時的淡入動畫 */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .content-header {
-            border-bottom: 3px solid var(--black);
+            border-bottom: 2px solid var(--light-gray);
             padding-bottom: 20px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .content-header h2 {
             font-size: 2.5rem;
-            font-weight: 900;
-            margin: 0 0 8px 0;
+            margin: 0 0 10px 0;
             color: var(--black);
         }
 
-        .content-header p {
-            font-size: 1rem;
-            color: var(--mid-gray);
-            margin: 0;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .empty-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: var(--mid-gray);
-            font-size: 1.1rem;
-            text-align: center;
-        }
-
-        /* 響應式設計 */
-        @media (max-width: 1000px) {
-            .grid-container {
-                gap: 20px;
-            }
-            .timeline-sidebar {
-                width: 180px;
-            }
-            .content-main {
-                padding: 25px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .grid-container {
-                flex-direction: column;
-                gap: 20px;
-                min-height: auto;
-            }
-            .timeline-sidebar {
-                width: 100%;
-                display: flex;
-                flex-direction: row;
-                overflow-x: auto;
-                overflow-y: visible;
-                max-height: 80px;
-            }
-            .timeline-item {
-                flex-shrink: 0;
-                border-bottom: none;
-                border-right: 1px solid var(--light-gray);
-                border-left: none;
-                padding: 12px 16px;
-                min-width: 120px;
-            }
-            .timeline-item:last-child {
-                border-right: none;
-            }
-            .timeline-item.active {
-                border-left: none;
-                border-bottom: 4px solid var(--black);
-            }
-            .content-main {
-                padding: 20px;
-            }
-            .content-header h2 {
-                font-size: 2rem;
-            }
-        }
-
-        @media (max-width: 500px) {
-            .timeline-item {
-                padding: 10px 12px;
-                font-size: 0.9rem;
-            }
-            .timeline-date {
-                font-size: 0.9rem;
-            }
-            .timeline-topic {
-                font-size: 0.65rem;
-            }
-            .content-main {
-                padding: 15px;
-            }
-            .content-header h2 {
-                font-size: 1.5rem;
-            }
-        }
-
-        /* 卡片設計：用於內容容器 */
-        .card {
-            background-color: transparent;
-            border: none;
-            border-top: none;
-            border-radius: 0;
-            box-shadow: none;
-            display: contents;
-            flex-direction: column;
-            transition: none;
-            overflow: visible;
-        }
-
-        .card:hover {
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* 卡片頭部 (Topic) */
-        .card-header {
-            padding: 25px 20px 20px;
-            border-bottom: 1px solid var(--light-gray);
-            background-color: var(--white);
-        }
-
-        .card-header h2 {
-            font-size: 2.2rem;
-            font-weight: 900;
-            margin: 0 0 5px 0;
-            color: var(--black);
-            line-height: 1;
-        }
-
-        .card-header p {
-            font-size: 0.95rem;
-            color: var(--mid-gray);
-            font-weight: 600;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* 卡片下拉區塊 (Details & Summary) */
-        details {
-            margin-top: auto;
-            background-color: #fafafa;
-        }
-
-        summary {
-            padding: 18px 20px;
-            font-size: 0.95rem;
-            font-weight: bold;
-            color: var(--dark-gray);
-            cursor: pointer;
-            list-style: none;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid transparent;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        summary::-webkit-details-marker { display: none; }
-
-        summary:hover {
-            background-color: var(--light-gray);
-            color: var(--black);
-        }
-
-        /* 加減號 Icon 變更為箭頭 */
-        summary .icon::after {
-            content: '↓';
+        .content-header .topic {
             font-size: 1.2rem;
-            transition: transform 0.3s ease;
-        }
-
-        details[open] summary .icon::after {
-            transform: rotate(180deg);
-        }
-
-        details[open] summary {
-            background-color: var(--black);
-            color: var(--white);
-            border-top: 1px solid var(--black);
-        }
-
-        /* 🌟 下拉展開動畫：淡入與滑動 */
-        details[open] summary ~ * {
-            animation: slideFadeDown 0.4s ease-out forwards;
-        }
-
-        @keyframes slideFadeDown {
-            0% {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* 展開後的內容區塊 */
-        .content {
-            padding: 20px;
-            background-color: var(--white);
-            border-top: 1px solid var(--light-gray);
-        }
-
-        .desc {
-            color: var(--dark-gray);
-            margin-bottom: 20px;
-            font-size: 0.95rem;
-            line-height: 1.7;
-        }
-
-        /* 連結按鍵 UI：框線與實心切換 */
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        a.btn {
-            display: block;
-            text-align: center;
-            padding: 10px 15px;
-            background-color: transparent;
-            color: var(--black);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-            border: 2px solid var(--black);
-            border-radius: 4px;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        a.btn:hover {
-            background-color: var(--black);
-            color: var(--white);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        /* 圖片特效 */
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-            display: block;
-            margin-top: 15px;
-            filter: grayscale(100%) contrast(1.2);
-            transition: filter 0.5s ease;
-        }
-
-        img:hover {
-            filter: grayscale(0%) contrast(1);
-        }
-
-        /* Vue 區塊特殊設計：深灰底色 */
-        .vue-box {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: var(--bg-gray);
-            border-radius: 6px;
-            border: 1px solid var(--light-gray);
-            text-align: center;
-        }
-
-        .vue-msg {
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin: 0 0 15px 0;
-            color: var(--black);
-        }
-
-        button.btn-action {
-            background-color: var(--black);
-            color: var(--white);
-            border: none;
-            border-radius: 4px;
-            padding: 10px 20px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            width: 100%;
-        }
-
-        button.btn-action:hover {
-            background-color: var(--dark-gray);
-            transform: scale(1.02);
-        }
-
-        button.btn-action:active {
-            transform: scale(0.98);
-        }
-
-        /* 尚未有內容的狀態 */
-        .empty-state {
             color: var(--mid-gray);
-            font-size: 0.9rem;
-            text-align: center;
-            padding: 30px 20px;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                #f0f0f0 10px,
-                #f0f0f0 20px
-            );
+            font-weight: bold;
         }
 
+        /* 響應式設計：手機版改為上下排列 */
+        @media (max-width: 850px) {
+            .app-layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                flex: none;
+                width: 100%;
+                position: static;
+            }
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* 沿用原本的內容樣式 */
+        .desc { color: var(--dark-gray); margin-bottom: 20px; font-size: 1.05rem; line-height: 1.7; }
+        .btn-group { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+        a.btn { padding: 10px 20px; background-color: transparent; color: var(--black); text-decoration: none; font-size: 0.9rem; font-weight: bold; border: 2px solid var(--black); border-radius: 4px; transition: all 0.3s; }
+        a.btn:hover { background-color: var(--black); color: var(--white); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        img { max-width: 100%; height: auto; border-radius: 4px; display: block; margin-top: 15px; filter: grayscale(100%) contrast(1.2); transition: filter 0.5s ease; }
+        img:hover { filter: grayscale(0%) contrast(1); }
+        .vue-box { margin-top: 20px; padding: 20px; background-color: var(--bg-gray); border-radius: 6px; border: 1px solid var(--light-gray); text-align: center; }
+        .vue-msg { font-size: 1.1rem; font-weight: bold; margin: 0 0 15px 0; color: var(--black); }
+        button.btn-action { background-color: var(--black); color: var(--white); border: none; border-radius: 4px; padding: 10px 20px; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button.btn-action:hover { background-color: var(--dark-gray); }
+        
         /* 實驗專用樣式 */
-        .experiment-section {
-            margin-top: 25px;
-            padding-top: 25px;
-            border-top: 2px solid var(--light-gray);
-        }
-
-        .experiment-title {
-            font-size: 1rem;
-            font-weight: bold;
-            color: var(--black);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .color-box {
-            width: 100%;
-            height: 100px;
-            border-radius: 6px;
-            background-color: #3498db;
-            margin: 10px 0 15px 0;
-            transition: background-color 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-weight: bold;
-        }
-
-        .color-button {
-            background-color: var(--black);
-            color: var(--white);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.85rem;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-
-        .color-button:hover {
-            background-color: var(--dark-gray);
-            transform: scale(1.02);
-        }
-
-        /* 倒數計時器樣式 */
-        .timer-display {
-            font-size: 3rem;
-            font-weight: bold;
-            text-align: center;
-            color: var(--black);
-            background-color: #f0f0f0;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 5px;
-        }
-
-        .timer-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .timer-buttons button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-        }
-
-        .btn-start { background-color: #27ae60; color: var(--white); }
-        .btn-start:hover { background-color: #229954; }
-
-        .btn-pause { background-color: #f39c12; color: var(--white); }
-        .btn-pause:hover { background-color: #e67e22; }
-
-        .btn-cancel { background-color: #e74c3c; color: var(--white); }
-        .btn-cancel:hover { background-color: #c0392b; }
-
-        /* 數位時鐘樣式 */
-        .clock-display {
-            background-color: #000;
-            color: #0f0;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            font-family: 'Courier New', monospace;
-            font-size: 1.3rem;
-            margin: 15px 0;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            letter-spacing: 2px;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
-        }
-
-        /* 進度條樣式 */
-        .progress-container {
-            width: 100%;
-            height: 30px;
-            background-color: #e0e0e0;
-            border-radius: 15px;
-            overflow: hidden;
-            margin: 15px 0;
-            border: 2px solid var(--black);
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #3498db, #9b59b6);
-            width: 0%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-weight: bold;
-            font-size: 0.8rem;
-            transition: width 0.1s linear;
-        }
-
-        .progress-button {
-            background-color: var(--black);
-            color: var(--white);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.85rem;
-            width: 100%;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-        }
-
-        .progress-button:hover {
-            background-color: var(--dark-gray);
-            transform: scale(1.02);
-        }
-
-        .progress-button:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-        }
+        .experiment-section { margin-top: 30px; padding-top: 25px; border-top: 1px dashed var(--mid-gray); }
+        .experiment-title { font-size: 1.2rem; font-weight: bold; color: var(--black); margin-bottom: 15px; }
+        .color-box { width: 100%; height: 100px; border-radius: 6px; background-color: #3498db; margin: 10px 0 15px 0; display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: bold; }
+        .color-button { background-color: var(--black); color: var(--white); border: none; padding: 10px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; }
+        .timer-display { font-size: 3rem; font-weight: bold; text-align: center; color: var(--black); background-color: #f0f0f0; padding: 20px; border-radius: 8px; margin: 15px 0; font-family: 'Courier New', monospace; letter-spacing: 5px; }
+        .timer-buttons { display: flex; gap: 10px; margin-top: 10px; }
+        .timer-buttons button { flex: 1; padding: 10px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; }
+        .btn-start { background-color: #27ae60; }
+        .btn-pause { background-color: #f39c12; }
+        .btn-cancel { background-color: #e74c3c; }
+        .clock-display { background-color: #000; color: #0f0; padding: 20px; border-radius: 8px; text-align: center; font-family: 'Courier New', monospace; font-size: 1.5rem; margin: 15px 0; box-shadow: 0 0 10px rgba(0, 255, 0, 0.3); }
+        .progress-container { width: 100%; height: 30px; background-color: #e0e0e0; border-radius: 15px; overflow: hidden; margin: 15px 0; border: 2px solid var(--black); }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #3498db, #9b59b6); width: 0%; display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: bold; font-size: 0.8rem; transition: width 0.1s linear; }
+        .progress-button { background-color: var(--black); color: var(--white); border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
+        .empty-state { color: var(--mid-gray); text-align: center; padding: 50px 20px; font-weight: bold; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <header>
-            <h1>網站前端技術應用</h1>
-            <p>STUDENT // 11128217 林楷倫</p>
+            <div>
+                <h1>網站前端技術應用</h1>
+                <p>STUDENT // 11128217 林楷倫</p>
+            </div>
             <a href="project.html" class="project-link-block">✦ 運勢分析 ✦</a>
         </header>
 
-        <div class="grid-container">
-            <!-- 左侧時間軸 -->
-            <div class="timeline-sidebar" id="timelineSidebar"></div>
+        <div class="app-layout">
+            
+            <aside class="sidebar">
+                <div class="sidebar-title">Course Progress</div>
+                <ul class="menu-list" id="menuList">
+                    </ul>
+            </aside>
 
-            <!-- 右側內容區 -->
-            <div class="content-main" id="contentMain">
-                <div class="empty-content">選擇左側日期查看內容</div>
-            </div>
-        </div>
+            <main class="main-content" id="mainContent">
+                </main>
 
-        <!-- 隱藏的卡片容器：用於儲存所有內容數據 -->
-        <div id="cardsData" style="display: none;">
-            <div class="card" data-date="02/26" data-topic="基礎 HTML & Vue.js">
-                <div class="card-header">
-                    <h2>02/26</h2>
-                    <p>基礎 HTML & Vue.js</p>
-                </div>
-                <details open>
-                    <summary>實作內容 <span class="icon"></span></summary>
-                    <div class="content">
-                        <p class="desc">學習基礎標籤、外部連結，並初步導入 Vue.js 進行狀態切換測試。</p>
-                        <div class="btn-group">
-                            <a href="https://www.google.com" target="_blank" class="btn">前往 Google</a>
-                            <a href="https://www.youtube.com" target="_blank" class="btn">前往 YouTube</a>
-                            <a href="about.html" class="btn">關於我們</a>
-                            <a href="https://pages.github.com/" target="_blank" class="btn">GitHub Pages 文件</a>
-                        </div>
-                        <img src="https://picsum.photos/400/250" alt="示例圖片">
-                        
-                        <div id="app" class="vue-box">
-                            <h3 class="vue-msg">{{ message }}</h3>
-                            <button @click="changeMessage" class="btn-action">觸發狀態變更</button>
-                        </div>
-                    </div>
-                </details>
-            </div>
-
-            <div class="card" data-date="03/05" data-topic="個人檔案連結實作">
-                <div class="card-header">
-                    <h2>03/05</h2>
-                    <p>個人檔案連結實作</p>
-                </div>
-                <details>
-                    <summary>實作內容 <span class="icon"></span></summary>
-                    <div class="content">
-                        <p class="desc">本週練習建立個人檔案頁面導覽與站內連結。</p>
-                        <div class="btn-group">
-                            <a href="profile.html" class="btn">個人檔案 (Profile)</a>
-                        </div>
-                    </div>
-                </details>
-            </div>
-
-            <div class="card" data-date="03/12" data-topic="修改主要練習網頁">
-                <div class="card-header">
-                    <h2>03/12</h2>
-                    <p>修改主要練習網頁</p>
-                </div>
-                <details>
-                    <summary>實作內容 <span class="icon"></span></summary>
-                    <div class="content">
-                         <p class="desc">本週練習優化網站練習頁面與了解Flex box、Grid、RWD。</p>
-                    </div>
-                </details>
-            </div>
         </div>
     </div>
 
     <script>
-        // ========== 時間軸初始化與内容管理 ==========
-        const cardsData = document.getElementById('cardsData');
-        const timelineSidebar = document.getElementById('timelineSidebar');
-        const contentMain = document.getElementById('contentMain');
-        
-        // 所有周次數據
-        const allDates = {
-            '02/26': { topic: '基礎 HTML & Vue.js', card: null },
-            '03/05': { topic: '個人檔案連結實作', card: null },
-            '03/12': { topic: '修改主要練習網頁', card: null },
-            '03/19': { topic: 'JavaScript 實驗五合一', card: null },
-            '03/26': { topic: '每週練習主題', card: null },
-            '04/02': { topic: '每週練習主題', card: null },
-            '04/09': { topic: '每週練習主題', card: null },
-            '04/16': { topic: '每週練習主題', card: null },
-            '04/23': { topic: '每週練習主題', card: null },
-            '04/30': { topic: '每週練習主題', card: null },
-            '05/07': { topic: '每週練習主題', card: null },
-            '05/14': { topic: '每週練習主題', card: null },
-            '05/21': { topic: '每週練習主題', card: null },
-            '05/28': { topic: '每週練習主題', card: null },
-            '06/04': { topic: '期末統整與專題', card: null }
-        };
+        // =========================================
+        // 核心資料結構：集中管理所有每週內容
+        // =========================================
+        const courseData = [
+            {
+                date: '02/26',
+                topic: '基礎 HTML & Vue.js',
+                content: `
+                    <p class="desc">學習基礎標籤、外部連結，並初步導入 Vue.js 進行狀態切換測試。</p>
+                    <div class="btn-group">
+                        <a href="https://www.google.com" target="_blank" class="btn">前往 Google</a>
+                        <a href="https://www.youtube.com" target="_blank" class="btn">前往 YouTube</a>
+                        <a href="about.html" class="btn">關於我們</a>
+                        <a href="https://pages.github.com/" target="_blank" class="btn">GitHub Pages 文件</a>
+                    </div>
+                    <img src="https://picsum.photos/800/300" alt="示例圖片">
+                    <div id="app" class="vue-box">
+                        <h3 class="vue-msg">{{ message }}</h3>
+                        <button @click="changeMessage" class="btn-action">觸發狀態變更</button>
+                    </div>
+                `
+            },
+            {
+                date: '03/05',
+                topic: '個人檔案連結實作',
+                content: `
+                    <p class="desc">本週練習建立個人檔案頁面導覽與站內連結。</p>
+                    <div class="btn-group">
+                        <a href="profile.html" class="btn">進入個人檔案 (Profile)</a>
+                    </div>
+                `
+            },
+            {
+                date: '03/12',
+                topic: '修改主要練習網頁',
+                content: `
+                     <p class="desc">本週練習優化網站練習頁面與了解 Flex box、Grid、RWD 響應式網頁設計的概念。</p>
+                `
+            },
+            {
+                date: '03/19',
+                topic: 'JavaScript 實驗五合一',
+                content: `
+                    <p class="desc">學習 JavaScript 基本語法與 DOM 操作，包含 5 個實驗項目。</p>
 
-        // 獲取已有卡片
-        document.querySelectorAll('#cardsData .card').forEach(card => {
-            const date = card.getAttribute('data-date');
-            if (allDates[date]) {
-                allDates[date].card = card;
+                    <div class="experiment-section">
+                        <div class="experiment-title">🎨 實驗二：DOM 操作 - 改變背景顏色</div>
+                        <div class="color-box" id="colorBox">點擊下方按鈕改變顏色</div>
+                        <button class="color-button" onclick="changeBackgroundColor()">隨機改變背景顏色</button>
+                    </div>
+
+                    <div class="experiment-section">
+                        <div class="experiment-title">⏱️ 實驗三：倒數計時器</div>
+                        <div class="timer-display" id="timerDisplay">10</div>
+                        <div class="timer-buttons">
+                            <button class="btn-start" onclick="startTimer()">開始倒數</button>
+                            <button class="btn-pause" onclick="pauseTimer()">暫停</button>
+                            <button class="btn-cancel" onclick="cancelTimer()">取消</button>
+                        </div>
+                    </div>
+
+                    <div class="experiment-section">
+                        <div class="experiment-title">🕐 實驗四：數位時鐘</div>
+                        <div class="clock-display" id="clockDisplay">00:00:00</div>
+                    </div>
+
+                    <div class="experiment-section">
+                        <div class="experiment-title">📊 實驗五：進度條 (5秒完成)</div>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="progressBar">0%</div>
+                        </div>
+                        <button class="progress-button" id="startProgressBtn" onclick="startProgress()">開始進度條</button>
+                    </div>
+                `
             }
+        ];
+
+        // 自動生成未來的空日期
+        const futureDates = ['03/26', '04/02', '04/09', '04/16', '04/23', '04/30', '05/07', '05/14', '05/21', '05/28', '06/04'];
+        futureDates.forEach(date => {
+            const topic = date === '06/04' ? '期末統整與專題' : '每週練習主題';
+            courseData.push({
+                date: date,
+                topic: topic,
+                content: `<div class="empty-state">尚無內容 DATA PENDING</div>`
+            });
         });
 
-        // 生成動態卡片
-        function generateCard(date, topic) {
-            if (date === '03/19') {
-                const container = document.createElement('div');
-                container.className = 'card';
-                container.setAttribute('data-date', date);
-                container.setAttribute('data-topic', topic);
-                container.innerHTML = `
-                    <div class="card-header">
-                        <h2>${date}</h2>
-                        <p>${topic}</p>
-                    </div>
-                    <details open>
-                        <summary>實作內容 <span class="icon"></span></summary>
-                        <div class="content">
-                            <p class="desc">學習 JavaScript 基本語法與 DOM 操作，包含 5 個實驗項目。</p>
+        // =========================================
+        // 渲染邏輯
+        // =========================================
+        const menuList = document.getElementById('menuList');
+        const mainContent = document.getElementById('mainContent');
+        let vueAppInstance = null; // 用來存儲 Vue 實例，方便卸載與重新掛載
 
-                            <!-- 實驗二：改變背景顏色 -->
-                            <div class="experiment-section">
-                                <div class="experiment-title">🎨 實驗二：DOM 操作 - 改變背景顏色</div>
-                                <div class="color-box" id="colorBox">點擊下方按鈕改變顏色</div>
-                                <button class="color-button">隨機改變背景顏色</button>
-                            </div>
-
-                            <!-- 實驗三：倒數計時器 -->
-                            <div class="experiment-section">
-                                <div class="experiment-title">⏱️ 實驗三：倒數計時器</div>
-                                <div class="timer-display" id="timerDisplay">10</div>
-                                <div class="timer-buttons">
-                                    <button class="timer-buttons btn-start">開始倒數</button>
-                                    <button class="timer-buttons btn-pause">暫停</button>
-                                    <button class="timer-buttons btn-cancel">取消</button>
-                                </div>
-                            </div>
-
-                            <!-- 實驗四：數位時鐘 -->
-                            <div class="experiment-section">
-                                <div class="experiment-title">🕐 實驗四：數位時鐘</div>
-                                <div class="clock-display" id="clockDisplay">00:00:00</div>
-                            </div>
-
-                            <!-- 實驗五：進度條 -->
-                            <div class="experiment-section">
-                                <div class="experiment-title">📊 實驗五：進度條 (5秒完成)</div>
-                                <div class="progress-container">
-                                    <div class="progress-bar" id="progressBar">0%</div>
-                                </div>
-                                <button class="progress-button" id="startProgressBtn">開始進度條</button>
-                            </div>
-
-                            <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--light-gray);">
-                                <p class="desc">👆 每個實驗都有對應的互動按鈕，點擊即可體驗功能</p>
-                            </div>
-                        </div>
-                    </details>
-                `;
-                return container;
-            } else {
-                const container = document.createElement('div');
-                container.className = 'card';
-                container.setAttribute('data-date', date);
-                container.setAttribute('data-topic', topic);
-                container.innerHTML = `
-                    <div class="card-header">
-                        <h2>${date}</h2>
-                        <p>${topic}</p>
-                    </div>
-                    <details>
-                        <summary>實作內容 <span class="icon"></span></summary>
-                        <div class="content empty-state">尚無內容 DATA PENDING</div>
-                    </details>
-                `;
-                return container;
-            }
+        function renderMenu() {
+            menuList.innerHTML = '';
+            courseData.forEach((item, index) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'menu-item';
+                // 預設選中 03/19 (索引3) 或最新的實驗
+                if (index === 3) btn.classList.add('active'); 
+                
+                btn.innerHTML = `<span class="topic-name">${item.topic}</span> <span class="date">${item.date}</span>`;
+                btn.onclick = () => selectContent(index, btn);
+                
+                li.appendChild(btn);
+                menuList.appendChild(li);
+            });
         }
 
-        // 為未生成的日期創建卡片
-        Object.entries(allDates).forEach(([date, data]) => {
-            if (!data.card) {
-                data.card = generateCard(date, data.topic);
-                cardsData.appendChild(data.card);
-            }
-        });
+        function selectContent(index, btnElement) {
+            // 移除所有 active 狀態
+            document.querySelectorAll('.menu-item').forEach(btn => btn.classList.remove('active'));
+            if(btnElement) btnElement.classList.add('active');
 
-        // 建立時間軸側邊欄
-        Object.entries(allDates).forEach(([date, data]) => {
-            const timelineItem = document.createElement('div');
-            timelineItem.className = 'timeline-item';
-            timelineItem.innerHTML = `
-                <span class="timeline-date">${date}</span>
-                <span class="timeline-topic">${data.topic}</span>
-            `;
-            timelineItem.addEventListener('click', () => showContent(date, timelineItem));
-            timelineSidebar.appendChild(timelineItem);
-        });
+            const data = courseData[index];
+            
+            // 重新觸發動畫 (移除 DOM 再加回去)
+            mainContent.style.animation = 'none';
+            mainContent.offsetHeight; /* 觸發重繪 */
+            mainContent.style.animation = null; 
 
-        // 顯示內容
-        function showContent(date, timelineItem) {
-            // 移除舊的active狀態
-            document.querySelectorAll('.timeline-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            timelineItem.classList.add('active');
-
-            // 獲取卡片內容
-            const cardData = allDates[date].card;
-            const cardHeader = cardData.querySelector('.card-header');
-            const cardContent = cardData.querySelector('details');
-
-            // 清空并更新右側內容
-            contentMain.innerHTML = `
+            // 寫入內容
+            mainContent.innerHTML = `
                 <div class="content-header">
-                    <h2>${cardHeader.querySelector('h2').textContent}</h2>
-                    <p>${cardHeader.querySelector('p').textContent}</p>
+                    <h2>${data.date}</h2>
+                    <div class="topic">${data.topic}</div>
+                </div>
+                <div class="content-body">
+                    ${data.content}
                 </div>
             `;
 
-            // 複製詳細內容
-            const contentClone = cardContent.cloneNode(true);
-            contentClone.open = true;
-            contentMain.appendChild(contentClone);
-
-            // 重新初始化該日期的互動功能
-            if (date === '03/19') {
-                // 重置計時器狀態
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                }
-                timerTime = 10;
-                timerRunning = false;
-                
-                // 初始化時鐘顯示
-                updateClock();
-                setInterval(updateClock, 1000);
-            }
-            
-            // 重新綁定事件監聽器（必須在內容插入後）
-            reinitializeEventListeners();
-            
-            // 重新初始化Vue應用（如果存在）
-            setTimeout(() => {
-                if (document.getElementById('app')) {
-                    initializeVueApp();
-                }
-            }, 0);
-        }
-
-        // 重新綁定所有事件監聽器
-        function reinitializeEventListeners() {
-            // 綁定顏色按鈕
-            const colorBtn = contentMain.querySelector('.color-button');
-            if (colorBtn) {
-                const newColorBtn = colorBtn.cloneNode(true);
-                colorBtn.replaceWith(newColorBtn);
-                newColorBtn.addEventListener('click', changeBackgroundColor);
-            }
-
-            // 綁定計時器按鈕
-            const timerBtns = contentMain.querySelectorAll('.timer-buttons.btn-start, .timer-buttons.btn-pause, .timer-buttons.btn-cancel');
-            if (timerBtns.length > 0) {
-                timerBtns.forEach((btn) => {
-                    const newBtn = btn.cloneNode(true);
-                    btn.replaceWith(newBtn);
-                    
-                    if (newBtn.classList.contains('btn-start')) {
-                        newBtn.addEventListener('click', startTimer);
-                    } else if (newBtn.classList.contains('btn-pause')) {
-                        newBtn.addEventListener('click', pauseTimer);
-                    } else if (newBtn.classList.contains('btn-cancel')) {
-                        newBtn.addEventListener('click', cancelTimer);
-                    }
-                });
-            }
-
-            // 綁定進度條按鈕
-            const progressBtn = contentMain.querySelector('.progress-button');
-            if (progressBtn) {
-                const newProgressBtn = progressBtn.cloneNode(true);
-                progressBtn.replaceWith(newProgressBtn);
-                newProgressBtn.addEventListener('click', startProgress);
+            // 如果切換到的頁面包含 Vue 元素 (#app)，需要重新掛載 Vue
+            if (data.date === '02/26') {
+                mountVueApp();
+            } else if (vueAppInstance) {
+                vueAppInstance.unmount();
+                vueAppInstance = null;
             }
         }
 
-        // 初始化：顯示第一個日期的內容
-        const firstTimelineItem = document.querySelector('.timeline-item');
-        if (firstTimelineItem) {
-            firstTimelineItem.click();
-        }
-    </script>
+        // 初始化
+        renderMenu();
+        // 預設載入 03/19 的內容
+        selectContent(3, menuList.children[3].querySelector('button'));
 
-    <script>
-
-    <script>
-        // ========== 實驗二：改變背景顏色 ==========
+        // =========================================
+        // 實驗邏輯功能 (維持原樣)
+        // =========================================
         function changeBackgroundColor() {
             const colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#e67e22'];
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            const colorBox = document.getElementById('colorBox');
-            if (colorBox) {
-                colorBox.style.backgroundColor = randomColor;
-                colorBox.textContent = `背景顏色: ${randomColor}`;
+            const box = document.getElementById('colorBox');
+            if(box) {
+                box.style.backgroundColor = randomColor;
+                box.textContent = `背景顏色: ${randomColor}`;
             }
         }
 
-        // ========== 實驗三：倒數計時器 ==========
         let timerInterval = null;
         let timerTime = 10;
         let timerRunning = false;
@@ -944,12 +428,13 @@
         function startTimer() {
             if (timerRunning) return;
             timerRunning = true;
-            
             timerInterval = setInterval(() => {
+                const display = document.getElementById('timerDisplay');
+                if(!display) { clearInterval(timerInterval); return; } // 防呆：切換頁面後停止
+                
                 if (timerTime > 0) {
                     timerTime--;
-                    const display = document.getElementById('timerDisplay');
-                    if (display) display.textContent = timerTime;
+                    display.textContent = timerTime;
                 } else {
                     clearInterval(timerInterval);
                     timerRunning = false;
@@ -966,17 +451,18 @@
         }
 
         function cancelTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
+            if (timerInterval) clearInterval(timerInterval);
             timerTime = 10;
             timerRunning = false;
             const display = document.getElementById('timerDisplay');
-            if (display) display.textContent = '10';
+            if(display) display.textContent = '10';
         }
 
-        // ========== 實驗四：數位時鐘 ==========
+        // 數位時鐘 (持續在背景運行即可，只要畫面上存在 clockDisplay 就更新)
         function updateClock() {
+            const display = document.getElementById('clockDisplay');
+            if (!display) return;
+            
             const now = new Date();
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -985,24 +471,15 @@
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
             
-            const timeString = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
-            const display = document.getElementById('clockDisplay');
-            if (display) display.textContent = timeString;
+            display.textContent = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
         }
+        setInterval(updateClock, 1000);
 
-        // ========== 實驗五：進度條 ==========
         let progressInterval = null;
-
         function startProgress() {
             const progressBar = document.getElementById('progressBar');
             const startBtn = document.getElementById('startProgressBtn');
-            
-            if (!progressBar || !startBtn) return;
-            
-            // 清除之前的進度條
-            if (progressInterval) {
-                clearInterval(progressInterval);
-            }
+            if(!progressBar || !startBtn) return;
             
             startBtn.disabled = true;
             let progress = 0;
@@ -1010,43 +487,25 @@
             progressBar.textContent = '0%';
             
             progressInterval = setInterval(() => {
-                progress += 2; // 每50ms增加2%，5秒內完成
-                
+                progress += 2;
                 if (progress >= 100) {
                     progress = 100;
                     clearInterval(progressInterval);
-                    progressInterval = null;
                     startBtn.disabled = false;
                 }
-                
                 progressBar.style.width = progress + '%';
                 progressBar.textContent = progress + '%';
             }, 50);
         }
 
-        // ========== Vue 應用初始化函數 ==========
-        function initializeVueApp() {
-            const appElement = document.getElementById('app');
-            if (!appElement) return;
-
+        // Vue 應用掛載函數
+        function mountVueApp() {
             const { createApp } = Vue;
-            createApp({
-                data() {
-                    return {
-                        message: "SYSTEM STANDBY: Hello Vue!"
-                    };
-                },
-                methods: {
-                    changeMessage() {
-                        this.message = "STATUS UPDATED: 訊息切換成功。";
-                    }
-                }
-            }).mount("#app");
-        }
-
-        // 第一次載入時初始化Vue
-        if (document.getElementById('app')) {
-            initializeVueApp();
+            vueAppInstance = createApp({
+                data() { return { message: "SYSTEM STANDBY: Hello Vue!" }; },
+                methods: { changeMessage() { this.message = "STATUS UPDATED: 訊息切換成功。"; } }
+            });
+            vueAppInstance.mount("#app");
         }
     </script>
 </body>
