@@ -333,11 +333,19 @@
                         <button class="progress-button" id="startProgressBtn" onclick="startProgress()">開始進度條</button>
                     </div>
                 `
+            },
+            {
+                date: '03/26',
+                topic: '內嵌式網頁',
+                content: `
+                    <p class="desc">將 0326.html 的內容以外部嵌入 (iframe) 方式放置於此實作內容中。</p>
+                    <iframe src="0326.html" width="100%" height="600" style="border:1px solid var(--light-gray); border-radius: 8px;"></iframe>
+                `
             }
         ];
 
         // 自動生成未來的空日期
-        const futureDates = ['03/26', '04/02', '04/09', '04/16', '04/23', '04/30', '05/07', '05/14', '05/21', '05/28', '06/04'];
+        const futureDates = ['04/02', '04/09', '04/16', '04/23', '04/30', '05/07', '05/14', '05/21', '05/28', '06/04'];
         futureDates.forEach(date => {
             const topic = date === '06/04' ? '期末統整與專題' : '每週練習主題';
             courseData.push({
