@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0409 學習基本 Vue 架構</title>
+    <style>
+        :root {
+            --black: #111111;
+            --dark-gray: #2b2b2b;
+            --mid-gray: #757575;
+            --light-gray: #e0e0e0;
+            --bg-gray: #f7f7f8;
+            --white: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-gray);
+            color: var(--black);
+            font-family: 'Helvetica Neue', Arial, 'Noto Sans TC', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 40px;
+            border: 1px solid var(--light-gray);
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin: 0 0 30px 0;
+            color: var(--black);
+            border-bottom: 3px solid var(--black);
+            padding-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            color: var(--dark-gray);
+            margin: 35px 0 15px 0;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+            font-weight: 700;
+        }
+
+        .reference-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #3498db;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .reference-box p {
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: var(--dark-gray);
+        }
+
+        .reference-box a {
+            color: #2980b9;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .reference-box a:hover {
+            color: #1a5276;
+            text-decoration: underline;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+
+        ul li {
+            margin: 12px 0;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        code {
+            background-color: #f4f4f4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+            font-size: 0.95rem;
+            font-weight: bold;
+        }
+
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid #1e1e1e;
+        }
+
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        .section {
+            margin: 25px 0;
+        }
+
+        .desc {
+            color: var(--mid-gray);
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        .highlight strong {
+            color: #856404;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: #3498db;
+            color: var(--white);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 學習基本 Vue 架構 (04/09)</h1>
+
+        <div class="reference-box">
+            <p>📚 Vue 官方文檔參考教材：</p>
+            <p><a href="https://vuejs.org/" target="_blank">https://vuejs.org/</a></p>
+        </div>
+
+        <div class="section">
+            <h2>概述</h2>
+            <p class="desc">
+                本週學習內容重點是了解 Vue.js 的基本架構，並建立開發環境。我們需要安裝 NVM (Node Version Manager) 來管理 Node.js 版本，
+                然後使用 pnpm 和官方腳手架 create-vue 快速建立 Vue 專案。
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>第一步：安裝 NVM</h2>
+            <p class="desc">
+                NVM 是一個 Node 版本管理工具，允許我們快速安裝、使用及切換不同版本的 Node.js。
+            </p>
+            <div class="highlight">
+                <strong>💡 提示：</strong> 如果您使用的是 Windows，建議安裝 nvm-windows。如果是 macOS 或 Linux，使用官方 nvm。
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>第二步：安裝 & 管理 Node.js 版本</h2>
+            <p class="desc">使用以下指令安裝及管理 Node.js：</p>
+            <ul>
+                <li><code>nvm install 22</code> : 安裝 Node.js 版本 22</li>
+                <li><code>nvm alias default 22</code> : 設定預設版本為 22</li>
+                <li><code>nvm list</code> : 列出所有已安裝的 Node.js 版本</li>
+                <li><code>nvm use 22</code> : 切換到 Node.js 版本 22（臨時）</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>第三步：驗證 Node.js & npm 版本</h2>
+            <p class="desc">確認安裝成功：</p>
+            <ul>
+                <li><code>node --version</code> : 查看 Node.js 版本</li>
+                <li><code>npm --version</code> : 查看 npm 版本</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>第四步：安裝全域套件管理工具</h2>
+            <p class="desc">安裝 pnpm，這是一個更快更高效的套件管理工具：</p>
+            <pre><code>npm install -g pnpm</code></pre>
+            <ul>
+                <li><code>pnpm --version</code> : 驗證 pnpm 安裝成功</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>第五步：建立 Vue 專案</h2>
+            <p class="desc">使用官方腳手架建立新的 Vue 專案：</p>
+            <pre><code>pnpm create vue@latest</code></pre>
+            <div class="highlight">
+                <strong>✅ 按照提示選擇：</strong>
+                <ul>
+                    <li>TypeScript? → 根據需求選擇 (初學者可選 No)</li>
+                    <li>JSX Support? → 可選 No</li>
+                    <li>Router? → 可選 Yes (了解路由功能)</li>
+                    <li>Pinia? → 可選 Yes (狀態管理)</li>
+                    <li>Vitest? → 可選 Yes (測試框架)</li>
+                    <li>其他選項 → 根據需求選擇</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>第六步：安裝依賴 & 啟動開發伺服器</h2>
+            <p class="desc">進入專案目錄並安裝所有依賴：</p>
+            <pre><code>cd &lt;project-name&gt;
+pnpm install
+pnpm run dev</code></pre>
+            <div class="highlight">
+                <strong>🎯 完成！</strong> 您應該會看到類似以下的輸出：
+                <pre><code>  VITE v5.x.x  ready in xxx ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  press h + enter to show help</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>關鍵概念：什麼是 Vue.js？</h2>
+            <ul>
+                <li><strong>漸進式框架：</strong> 從簡單的交互開始，逐漸擴展到複雜應用</li>
+                <li><strong>響應式系統：</strong> 資料改變時，UI 自動更新</li>
+                <li><strong>組件化：</strong> 將 UI 拆分成可重用的組件</li>
+                <li><strong>虛擬 DOM：</strong> 高效的 DOM 操作與更新</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>常用 pnpm 指令</h2>
+            <ul>
+                <li><code>pnpm install</code> : 安裝所有依賴</li>
+                <li><code>pnpm add &lt;package-name&gt;</code> : 安裝新套件</li>
+                <li><code>pnpm run dev</code> : 啟動開發伺服器</li>
+                <li><code>pnpm run build</code> : 建立生產版本</li>
+                <li><code>pnpm run preview</code> : 預覽生產版本</li>
+            </ul>
+        </div>
+
+        <div class="section" style="margin-top: 50px; padding-top: 25px; border-top: 2px solid var(--light-gray);">
+            <h2 style="color: #27ae60;">✓ 學習完成檢查清單</h2>
+            <ul>
+                <li>✔ 了解 NVM 的用途及安裝方法</li>
+                <li>✔ 成功安裝 Node.js 版本 22</li>
+                <li>✔ 驗證 node 和 npm 版本</li>
+                <li>✔ 安裝 pnpm 全域工具</li>
+                <li>✔ 建立第一個 Vue 專案</li>
+                <li>✔ 啟動開發伺服器並在瀏覽器中查看</li>
+                <li>✔ 理解 Vue.js 的基本架構與特點</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
