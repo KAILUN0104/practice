@@ -5,39 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>網頁前端設計 | 林楷倫</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;900&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        /* CSS 變數：精細的灰階色板 */
         :root {
-            --black: #111111;
-            --dark-gray: #2b2b2b;
-            --mid-gray: #757575;
-            --light-gray: #e0e0e0;
-            --bg-gray: #f7f7f8;
-            --white: #ffffff;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.12);
+            --bg-color: #ECECEC;
+            --text-color: #121212;
+            --line-color: #A0A0A0; 
+            --transition-smooth: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --font-main: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
         }
 
-        /* 全域設定與微小點狀網格背景 */
-        body {
-            background-color: var(--bg-gray);
-            background-image: radial-gradient(var(--light-gray) 1px, transparent 1px);
-            background-size: 20px 20px;
-            color: var(--black);
-            font-family: 'Helvetica Neue', Arial, 'Noto Sans TC', sans-serif;
+        * {
             margin: 0;
-            padding: 50px 20px;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: default;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            padding: 4vw;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
-        /* 頂部標題區塊 */
         header {
-            border-bottom: 4px solid var(--black);
+            border-bottom: 1px solid var(--line-color);
             padding-bottom: 25px;
             margin-bottom: 40px;
             display: flex;
@@ -47,77 +48,72 @@
         }
 
         header h1 {
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 5vw, 4rem);
             font-weight: 900;
             margin: 0;
-            letter-spacing: 2px;
+            letter-spacing: -0.02em;
             text-transform: uppercase;
+            line-height: 1;
         }
 
         header p {
-            color: var(--mid-gray);
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin: 0;
+            color: var(--line-color);
+            font-size: 0.85rem;
+            font-weight: 300;
+            margin: 10px 0 0 0;
             letter-spacing: 1px;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
         }
 
         .project-link-block {
             display: block;
-            padding: 12px 20px;
-            background-color: var(--black);
-            color: var(--white);
+            padding: 10px 15px;
+            background: transparent;
+            color: var(--text-color);
             text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            white-space: nowrap;
+            border: 1px solid var(--line-color);
+            font-family: var(--font-mono);
+            font-weight: 300;
+            font-size: 0.75rem;
+            transition: var(--transition-smooth);
+            text-transform: uppercase;
         }
 
         .project-link-block:hover {
-            background-color: var(--mid-gray);
+            background: #F5F5F5;
             transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        /* =========================================
-           方案一：側邊欄與主要內容區塊佈局 (Flexbox)
-           ========================================= */
         .app-layout {
             display: flex;
             gap: 40px;
             align-items: flex-start;
         }
 
-        /* 左側選單 */
         .sidebar {
-            flex: 0 0 260px; /* 固定寬度 260px */
-            background-color: var(--white);
-            border: 1px solid var(--light-gray);
-            border-top: 5px solid var(--black);
-            border-radius: 8px;
-            padding: 20px 15px;
-            box-shadow: var(--shadow-sm);
+            flex: 0 0 260px;
+            background: transparent;
+            border-left: 1px solid var(--line-color);
+            padding: 0 0 0 20px;
             position: sticky;
-            top: 50px; /* 捲動時固定在畫面上方 */
+            top: 50px;
         }
 
         .sidebar-title {
-            font-size: 0.9rem;
-            color: var(--mid-gray);
+            font-size: 0.75rem;
+            color: var(--text-color);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-            padding-left: 10px;
-            font-weight: 800;
+            margin-bottom: 20px;
+            font-weight: 900;
+            font-family: var(--font-mono);
         }
 
         .menu-list {
             list-style: none;
             padding: 0;
             margin: 0;
+            border-top: 1px solid var(--line-color);
         }
 
         .menu-item {
@@ -125,43 +121,54 @@
             text-align: left;
             background: none;
             border: none;
-            padding: 12px 15px;
-            margin-bottom: 5px;
-            border-radius: 6px;
+            border-bottom: 1px solid var(--line-color);
+            padding: 15px 0;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-            color: var(--dark-gray);
-            transition: all 0.2s ease;
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: var(--text-color);
+            transition: var(--transition-smooth);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-family: var(--font-main);
+            text-transform: uppercase;
         }
 
         .menu-item:hover {
-            background-color: var(--light-gray);
+            padding-left: 10px;
+            background: #F5F5F5;
         }
 
         .menu-item.active {
-            background-color: var(--black);
-            color: var(--white);
+            font-weight: 900;
+            padding-left: 10px;
         }
 
         .menu-item .date {
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--line-color);
         }
 
-        /* 右側主要內容區 */
         .main-content {
             flex: 1;
-            background-color: var(--white);
-            border: 1px solid var(--light-gray);
-            border-radius: 8px;
-            padding: 40px;
-            box-shadow: var(--shadow-sm);
+            background: transparent;
+            border-left: 1px solid var(--line-color);
+            padding: 0 0 40px 40px;
             min-height: 500px;
-            animation: fadeIn 0.4s ease-out; /* 內容切換時的淡入動畫 */
+            animation: fadeIn 0.4s ease-out;
+            position: relative;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 1px;
+            background: var(--line-color);
         }
 
         @keyframes fadeIn {
@@ -170,24 +177,28 @@
         }
 
         .content-header {
-            border-bottom: 2px solid var(--light-gray);
+            border-bottom: 1px solid var(--line-color);
             padding-bottom: 20px;
             margin-bottom: 30px;
+            margin-top: 20px;
         }
 
         .content-header h2 {
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 900;
             margin: 0 0 10px 0;
-            color: var(--black);
+            color: var(--text-color);
+            line-height: 1;
+            font-family: var(--font-mono);
         }
 
         .content-header .topic {
-            font-size: 1.2rem;
-            color: var(--mid-gray);
-            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            font-weight: 100;
+            text-transform: uppercase;
         }
 
-        /* 響應式設計：手機版改為上下排列 */
         @media (max-width: 850px) {
             .app-layout {
                 flex-direction: column;
@@ -196,6 +207,15 @@
                 flex: none;
                 width: 100%;
                 position: static;
+                border-left: none;
+                padding-left: 0;
+            }
+            .main-content {
+                border-left: none;
+                padding-left: 0;
+            }
+            .main-content::before {
+                display: none;
             }
             header {
                 flex-direction: column;
@@ -203,34 +223,196 @@
             }
         }
 
-        /* 沿用原本的內容樣式 */
-        .desc { color: var(--dark-gray); margin-bottom: 20px; font-size: 1.05rem; line-height: 1.7; }
-        .btn-group { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
-        a.btn { padding: 10px 20px; background-color: transparent; color: var(--black); text-decoration: none; font-size: 0.9rem; font-weight: bold; border: 2px solid var(--black); border-radius: 4px; transition: all 0.3s; }
-        a.btn:hover { background-color: var(--black); color: var(--white); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        img { max-width: 100%; height: auto; border-radius: 4px; display: block; margin-top: 15px; filter: grayscale(100%) contrast(1.2); transition: filter 0.5s ease; }
-        img:hover { filter: grayscale(0%) contrast(1); }
-        .vue-box { margin-top: 20px; padding: 20px; background-color: var(--bg-gray); border-radius: 6px; border: 1px solid var(--light-gray); text-align: center; }
-        .vue-msg { font-size: 1.1rem; font-weight: bold; margin: 0 0 15px 0; color: var(--black); }
-        button.btn-action { background-color: var(--black); color: var(--white); border: none; border-radius: 4px; padding: 10px 20px; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button.btn-action:hover { background-color: var(--dark-gray); }
+        .desc { 
+            color: var(--text-color); 
+            margin-bottom: 20px; 
+            font-size: 1rem; 
+            font-weight: 300;
+            line-height: 1.6; 
+            max-width: 600px;
+        }
         
-        /* 實驗專用樣式 */
-        .experiment-section { margin-top: 30px; padding-top: 25px; border-top: 1px dashed var(--mid-gray); }
-        .experiment-title { font-size: 1.2rem; font-weight: bold; color: var(--black); margin-bottom: 15px; }
-        .color-box { width: 100%; height: 100px; border-radius: 6px; background-color: #3498db; margin: 10px 0 15px 0; display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: bold; }
-        .color-button { background-color: var(--black); color: var(--white); border: none; padding: 10px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; }
-        .timer-display { font-size: 3rem; font-weight: bold; text-align: center; color: var(--black); background-color: #f0f0f0; padding: 20px; border-radius: 8px; margin: 15px 0; font-family: 'Courier New', monospace; letter-spacing: 5px; }
-        .timer-buttons { display: flex; gap: 10px; margin-top: 10px; }
-        .timer-buttons button { flex: 1; padding: 10px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; }
-        .btn-start { background-color: #27ae60; }
-        .btn-pause { background-color: #f39c12; }
-        .btn-cancel { background-color: #e74c3c; }
-        .clock-display { background-color: #000; color: #0f0; padding: 20px; border-radius: 8px; text-align: center; font-family: 'Courier New', monospace; font-size: 1.5rem; margin: 15px 0; box-shadow: 0 0 10px rgba(0, 255, 0, 0.3); }
-        .progress-container { width: 100%; height: 30px; background-color: #e0e0e0; border-radius: 15px; overflow: hidden; margin: 15px 0; border: 2px solid var(--black); }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, #3498db, #9b59b6); width: 0%; display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: bold; font-size: 0.8rem; transition: width 0.1s linear; }
-        .progress-button { background-color: var(--black); color: var(--white); border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
-        .empty-state { color: var(--mid-gray); text-align: center; padding: 50px 20px; font-weight: bold; letter-spacing: 2px; }
+        .btn-group { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+        
+        a.btn { 
+            padding: 10px 20px; 
+            background: transparent; 
+            color: var(--text-color); 
+            text-decoration: none; 
+            font-size: 0.75rem; 
+            font-family: var(--font-mono);
+            font-weight: 300; 
+            border: 1px solid var(--line-color); 
+            transition: var(--transition-smooth); 
+            text-transform: uppercase;
+        }
+        a.btn:hover { 
+            background: #F5F5F5; 
+            transform: translateY(-2px); 
+        }
+        
+        img { 
+            max-width: 100%; 
+            height: auto; 
+            display: block; 
+            margin-top: 20px; 
+            filter: grayscale(100%); 
+            transition: var(--transition-smooth); 
+            border: 1px solid var(--line-color);
+        }
+        img:hover { filter: grayscale(0%); }
+        
+        .vue-box { 
+            margin-top: 30px; 
+            padding: 30px; 
+            background: transparent; 
+            border: 1px solid var(--line-color); 
+            text-align: left; 
+        }
+        .vue-msg { 
+            font-size: 1.5rem; 
+            font-weight: 100; 
+            margin: 0 0 20px 0; 
+            color: var(--text-color); 
+        }
+        
+        button.btn-action { 
+            background: transparent; 
+            color: var(--text-color); 
+            border: 1px solid var(--line-color); 
+            padding: 10px 20px; 
+            font-size: 0.75rem; 
+            font-family: var(--font-mono);
+            font-weight: 300; 
+            cursor: pointer; 
+            transition: var(--transition-smooth); 
+            text-transform: uppercase;
+        }
+        button.btn-action:hover { background: #F5F5F5; }
+        
+        .experiment-section { 
+            margin-top: 40px; 
+            padding-top: 20px; 
+            border-top: 1px solid var(--line-color); 
+        }
+        .experiment-title { 
+            font-size: 1rem; 
+            font-weight: 900; 
+            color: var(--text-color); 
+            margin-bottom: 15px; 
+            text-transform: uppercase;
+        }
+        .color-box { 
+            width: 100%; 
+            height: 100px; 
+            background-color: #ECECEC; 
+            border: 1px solid var(--line-color);
+            margin: 10px 0 15px 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: var(--text-color); 
+            font-family: var(--font-mono);
+            font-weight: 300; 
+            font-size: 0.85rem;
+        }
+        .color-button { 
+            background: transparent; 
+            color: var(--text-color); 
+            border: 1px solid var(--line-color); 
+            padding: 12px; 
+            cursor: pointer; 
+            font-family: var(--font-mono);
+            font-weight: 300; 
+            width: 100%; 
+            transition: var(--transition-smooth);
+            text-transform: uppercase;
+        }
+        .color-button:hover { background: #F5F5F5; }
+        
+        .timer-display { 
+            font-size: 4rem; 
+            font-weight: 100; 
+            text-align: center; 
+            color: var(--text-color); 
+            background: transparent; 
+            border: 1px solid var(--line-color);
+            padding: 20px; 
+            margin: 15px 0; 
+            font-family: var(--font-mono); 
+            line-height: 1;
+        }
+        .timer-buttons { display: flex; gap: 10px; margin-top: 15px; }
+        .timer-buttons button { 
+            flex: 1; 
+            padding: 12px; 
+            border: 1px solid var(--line-color); 
+            background: transparent;
+            cursor: pointer; 
+            font-family: var(--font-mono);
+            font-weight: 300; 
+            color: var(--text-color); 
+            transition: var(--transition-smooth);
+            text-transform: uppercase;
+        }
+        .timer-buttons button:hover { background: #F5F5F5; }
+        
+        .clock-display { 
+            background: transparent; 
+            color: var(--text-color); 
+            padding: 30px; 
+            border: 1px solid var(--line-color); 
+            text-align: center; 
+            font-family: var(--font-mono); 
+            font-weight: 100;
+            font-size: 2rem; 
+            margin: 15px 0; 
+        }
+        .progress-container { 
+            width: 100%; 
+            height: 40px; 
+            background: transparent; 
+            border: 1px solid var(--line-color); 
+            margin: 15px 0; 
+            position: relative;
+        }
+        .progress-bar { 
+            height: 100%; 
+            background: var(--line-color); 
+            width: 0%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: flex-end; 
+            padding-right: 10px;
+            color: var(--bg-color); 
+            font-family: var(--font-mono);
+            font-weight: 400; 
+            font-size: 0.8rem; 
+            transition: width 0.1s linear; 
+        }
+        .progress-button { 
+            background: transparent; 
+            color: var(--text-color); 
+            border: 1px solid var(--line-color); 
+            padding: 12px; 
+            cursor: pointer; 
+            font-family: var(--font-mono);
+            font-weight: 300; 
+            width: 100%; 
+            margin-top: 10px; 
+            transition: var(--transition-smooth);
+            text-transform: uppercase;
+        }
+        .progress-button:hover { background: #F5F5F5; }
+        
+        .empty-state { 
+            color: var(--line-color); 
+            text-align: left; 
+            padding: 40px 0; 
+            font-family: var(--font-mono);
+            font-weight: 300; 
+            text-transform: uppercase; 
+        }
     </style>
 </head>
 <body>
@@ -241,7 +423,7 @@
                 <h1>網站前端技術應用</h1>
                 <p>STUDENT // 11128217 林楷倫</p>
             </div>
-            <a href="index.html" class="project-link-block">⊲ HOME</a>
+            <a href="index.html" class="project-link-block">HOME</a>
         </header>
 
         <div class="app-layout">
@@ -305,13 +487,13 @@
                     <p class="desc">學習 JavaScript 基本語法與 DOM 操作，包含 5 個實驗項目。</p>
 
                     <div class="experiment-section">
-                        <div class="experiment-title">🎨 實驗二：DOM 操作 - 改變背景顏色</div>
+                        <div class="experiment-title">實驗二：DOM 操作 - 改變背景顏色</div>
                         <div class="color-box" id="colorBox">點擊下方按鈕改變顏色</div>
                         <button class="color-button" onclick="changeBackgroundColor()">隨機改變背景顏色</button>
                     </div>
 
                     <div class="experiment-section">
-                        <div class="experiment-title">⏱️ 實驗三：倒數計時器</div>
+                        <div class="experiment-title">實驗三：倒數計時器</div>
                         <div class="timer-display" id="timerDisplay">10</div>
                         <div class="timer-buttons">
                             <button class="btn-start" onclick="startTimer()">開始倒數</button>
@@ -321,12 +503,12 @@
                     </div>
 
                     <div class="experiment-section">
-                        <div class="experiment-title">🕐 實驗四：數位時鐘</div>
+                        <div class="experiment-title">實驗四：數位時鐘</div>
                         <div class="clock-display" id="clockDisplay">00:00:00</div>
                     </div>
 
                     <div class="experiment-section">
-                        <div class="experiment-title">📊 實驗五：進度條 (5秒完成)</div>
+                        <div class="experiment-title">實驗五：進度條 (5秒完成)</div>
                         <div class="progress-container">
                             <div class="progress-bar" id="progressBar">0%</div>
                         </div>
@@ -339,7 +521,7 @@
                 topic: '內嵌式網頁',
                 content: `
                     <p class="desc">將 0326.html 的內容以外部嵌入 (iframe) 方式放置於此實作內容中。</p>
-                    <iframe src="0326.html" width="100%" height="600" style="border:1px solid var(--light-gray); border-radius: 8px;"></iframe>
+                    <iframe src="0326.html" width="100%" height="600" style="border:1px solid var(--line-color); border-radius: 0;"></iframe>
                 `
             },
             {
@@ -354,7 +536,7 @@
                 topic: '學習基本 Vue 架構',
                 content: `
                     <p class="desc">學習基本 Vue 架構，並進行 Node.js 與 NVM 安裝環境設定。</p>
-                    <iframe src="0409.html" width="100%" height="800" style="border:1px solid var(--light-gray); border-radius: 8px;"></iframe>
+                    <iframe src="0409.html" width="100%" height="800" style="border:1px solid var(--line-color); border-radius: 0;"></iframe>
                 `
             }
         ];

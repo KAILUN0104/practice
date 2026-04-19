@@ -4,261 +4,321 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>林楷倫 | 個人檔案 SYSTEM_PROFILE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+TC:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;900&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        /* 科技感核心變數 */
         :root {
-            --primary-glow: #00f2ff;
-            --secondary-glow: #7000ff;
-            --bg-dark: #0a0b10;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --border-color: rgba(0, 242, 255, 0.3);
+            --bg-color: #ECECEC;
+            --text-color: #121212;
+            --line-color: #A0A0A0;
+            --transition-smooth: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --font-main: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: default;
         }
 
         body {
-            font-family: 'Noto Sans TC', 'Orbitron', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            padding-top: 60px;
+            overflow-x: hidden;
+        }
+
+        /* --- 固定顯示的平分導覽列 --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            background: var(--bg-color);
+            border-bottom: 1px solid var(--line-color);
+            z-index: 1000;
+        }
+
+        .header-item {
+            padding: 15px 20px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            border-right: 1px solid var(--line-color);
+            display: flex;
+            align-items: center;
+            height: 50px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .header-item:last-child {
+            border-right: none;
+        }
+
+        .container {
+            padding: 4vw;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            margin: 0 0 30px 0;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            font-weight: 900;
+            margin: 30px 0 20px 0;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--line-color);
+            padding-bottom: 15px;
+        }
+
+        .profile-card {
+            border: 1px solid var(--line-color);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: var(--transition-smooth);
+        }
+
+        .profile-card:hover {
+            background: #F5F5F5;
+        }
+
+        /* 1. 設定圓形相框 */
+        .profile-frame {
+            width: 150px;           /* 相框總寬度 */
+            height: 150px;          /* 相框總高度 */
+            border-radius: 50%;     /* 變成圓形 */
+            border: 2px solid var(--primary-glow); /* 你的科技感發光邊框線 */
+            
+            /* 選擇性：給相框一個背景顏色，增加層次感 */
+            background-color: rgba(255, 255, 255, 0.05); /* 或者與你網頁背景配合的顏色 */
+            
+            margin: 0 auto 20px auto; /* 置中並保留下方距離 */
+            display: flex;          /* 使用 Flexbox 讓圖片置中 */
+            justify-content: center;
+            align-items: center;
+            
+            overflow: hidden;       /* 確保圓形邊框裁切 */
+            box-sizing: border-box; /* 確保 padding 不會撐大相框 */
+        }
+
+        /* 2. 設定相框內的圖片 */
+        .profile-img {
+            /* 🌟 重點：透過調整這個百分比來縮小圖片在框內的佔比 */
+            width: 80%;             /* 圖片只佔相框寬度的 80% */
+            height: 80%;            /* 圖片只佔相框高度的 80% */
+            
+            border-radius: 50%;     /* 如果圖片縮小後看起來像方形，可以加上這行變圓形 */
+            
+            /* 🌟 重點：改成 contain，確保照片「完整呈現」，絕不裁切 */
+            object-fit: contain;    
+            
+            /* 移除原本的 margin 和 border，因為已經移到 .profile-frame 了 */
+            display: block;
+            border: none;
             margin: 0;
             padding: 0;
-            background-color: var(--bg-dark);
-            color: #e0e0e0;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(112, 0, 255, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 242, 255, 0.15) 0%, transparent 40%);
-            min-height: 100vh;
         }
 
-        /* 導覽列：返回按鈕 */
-        nav {
-            padding: 20px 50px;
-            background: rgba(10, 11, 16, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .text-center {
+            text-align: center;
         }
 
-        .btn-return {
-            color: var(--primary-glow);
-            text-decoration: none;
-            font-family: 'Orbitron';
-            font-size: 1rem;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: 0.3s;
-        }
-
-        .btn-return:hover {
-            text-shadow: 0 0 10px var(--primary-glow);
-            transform: translateX(-5px);
-        }
-
-        /* 主容器與雙欄網格 */
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 40px;
-        }
-
-        @media (max-width: 900px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* 玻璃面板卡片 */
-        .glass-panel {
-            background: var(--card-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .glass-panel:hover {
-            border-color: var(--primary-glow);
-            box-shadow: 0 8px 32px rgba(0, 242, 255, 0.1);
-        }
-
-        /* 左側：個人資訊卡 */
-        .profile-img {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            border: 3px solid var(--primary-glow);
-            padding: 5px;
-            margin: 0 auto 20px auto;
-            display: block;
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
-        }
-
-        .text-center { text-align: center; }
-        
-        h1 {
-            font-family: 'Orbitron';
-            font-size: 2rem;
-            margin: 0 0 5px 0;
-            color: #fff;
+        .text-left {
+            text-align: left;
         }
 
         .subtitle {
-            color: var(--primary-glow);
-            font-size: 0.95rem;
-            letter-spacing: 1px;
+            color: var(--line-color);
+            font-size: 0.85rem;
+            font-weight: 300;
             margin-bottom: 25px;
+            letter-spacing: 1px;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
         }
 
-        /* 經歷列表 */
         .info-list {
             list-style: none;
             padding: 0;
             margin: 0;
-            border-top: 1px dashed rgba(255,255,255,0.2);
+            border-top: 1px solid var(--line-color);
             padding-top: 20px;
         }
 
         .info-list li {
             margin-bottom: 15px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--line-color);
+        }
+
+        .info-list li:last-child {
+            border-bottom: none;
         }
 
         .info-list span {
             display: block;
-            font-size: 0.75rem;
-            color: #aaa;
-            margin-bottom: 3px;
-            font-family: 'Orbitron';
+            font-size: 0.7rem;
+            color: var(--line-color);
+            margin-bottom: 5px;
+            font-family: var(--font-mono);
             letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .highlight-text {
-            color: #fff;
-            font-weight: bold;
-        }
-        
-        .email-text {
-            color: var(--primary-glow);
-            text-decoration: none;
-            transition: 0.3s;
-        }
-        
-        .email-text:hover {
-            text-shadow: 0 0 8px var(--primary-glow);
+            color: var(--text-color);
+            font-weight: 300;
         }
 
-        /* 外部連結按鈕 */
+        .email-text {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 300;
+            transition: var(--transition-smooth);
+        }
+
+        .email-text:hover {
+            color: var(--line-color);
+        }
+
         .btn-external {
             display: block;
             width: 100%;
             margin-top: 20px;
-            padding: 12px 0;
-            background: linear-gradient(90deg, rgba(0, 242, 255, 0.1), rgba(112, 0, 255, 0.1));
-            border: 1px solid var(--primary-glow);
-            color: var(--primary-glow);
+            padding: 10px 15px;
+            background: transparent;
+            border: 1px solid var(--line-color);
+            color: var(--text-color);
             text-decoration: none;
             text-align: center;
-            font-family: 'Noto Sans TC', sans-serif;
-            font-weight: bold;
-            font-size: 0.9rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            font-family: var(--font-mono);
+            font-weight: 300;
+            font-size: 0.75rem;
+            transition: var(--transition-smooth);
+            text-transform: uppercase;
             box-sizing: border-box;
-            letter-spacing: 1px;
         }
 
         .btn-external:hover {
-            background: var(--primary-glow);
-            color: var(--bg-dark);
-            box-shadow: 0 0 15px var(--primary-glow);
+            background: #F5F5F5;
+            transform: translateY(-2px);
         }
 
-        /* 技能標籤 */
         .skill-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             margin-top: 15px;
         }
 
         .tag {
-            background: rgba(0, 242, 255, 0.1);
-            color: var(--primary-glow);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            border: 1px solid rgba(0, 242, 255, 0.3);
+            background: transparent;
+            color: var(--text-color);
+            padding: 8px 12px;
+            border-radius: 0;
+            font-size: 0.75rem;
+            border: 1px solid var(--line-color);
+            font-family: var(--font-mono);
+            font-weight: 300;
+            text-transform: uppercase;
+            transition: var(--transition-smooth);
         }
 
-        /* 右側：內容區塊 */
-        .section-title {
-            font-family: 'Orbitron';
-            font-size: 1.5rem;
-            color: var(--primary-glow);
-            border-bottom: 2px solid var(--secondary-glow);
-            padding-bottom: 10px;
-            margin-bottom: 25px;
-            display: inline-block;
+        .tag:hover {
+            background: #F5F5F5;
         }
 
         .content-block {
             margin-bottom: 30px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 3px solid var(--secondary-glow);
-            transition: transform 0.3s ease;
+            border-left: 1px solid var(--line-color);
+            padding: 0 0 0 25px;
+            transition: var(--transition-smooth);
         }
-        
+
         .content-block:hover {
-            transform: translateX(5px);
-            border-left-color: var(--primary-glow);
+            padding-left: 30px;
         }
 
         .content-block h3 {
-            font-size: 1.15rem;
-            color: #fff;
+            font-size: 1rem;
+            font-weight: 900;
             margin: 0 0 12px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            color: var(--text-color);
             line-height: 1.4;
+            text-transform: uppercase;
         }
 
         .content-block h3::before {
-            content: '>';
-            color: var(--primary-glow);
-            font-family: 'Orbitron';
-            font-weight: bold;
+            content: none;
         }
 
         .content-block p {
-            color: #bbb;
+            color: var(--text-color);
             line-height: 1.7;
             font-size: 0.95rem;
             margin: 0;
-            text-align: justify;
+            font-weight: 300;
+        }
+
+        .app-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .app-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            .header-item {
+                border-right: none;
+                border-bottom: 1px solid var(--line-color);
+            }
         }
 
     </style>
 </head>
 <body>
 
-    <nav>
-        <a href="index.html" class="btn-return">← RETURN_TO_MAIN</a>
-        <div style="font-family: 'Orbitron'; color: #555;">DATA_NODE: PROFILE</div>
-    </nav>
+    <header>
+        <div class="header-item" data-type="HOME">HOME</div>
+        <div class="header-item" id="clock" data-type="TIME">00:00:00</div>
+        <div class="header-item" data-type="TAIPEI / TAIWAN">TAIPEI / TAIWAN</div>
+        <div class="header-item" data-type="FOLLOW +">FOLLOW + </div>
+        <div class="header-item" data-type="CREATE BY LIN KAI-LUN">CREATE BY LIN KAI-LUN</div>
+    </header>
 
-    <main class="container">
-        <aside>
-            <div class="glass-panel text-center">
-                <img src="profile.jpg" alt="林楷倫" class="profile-img">
+    <div class="container">
+        <h1>About Me</h1>
+        
+        <div class="app-layout">
+            <aside>
+                <div class="profile-card text-center">
+                <div class="profile-frame">
+                <img src="photo.jpg" alt="林楷倫" class="profile-img">
+                </div>
                 <h1>林楷倫</h1>
                 <div class="subtitle">KAI-LUN LIN</div>
                 
@@ -284,11 +344,11 @@
                 <a href="https://kailun0104.github.io/practice/" target="_blank" class="btn-external">
                     [ LINK ] 網站前端技術應用課程
                 </a>
-            </div>
+                </div>
 
-            <div class="glass-panel" style="margin-top: 25px;">
-                <h2 style="font-family: 'Orbitron'; font-size: 1.1rem; color: #fff; margin-top: 0;">TECH_STACK</h2>
-                <div class="skill-tags">
+                <div class="profile-card" style="margin-top: 25px;">
+                    <h3 style="font-size: 0.9rem; font-weight: 900; margin-top: 0; text-transform: uppercase;">TECH STACK</h3>
+                    <div class="skill-tags">
                     <span class="tag">C / Python</span>
                     <span class="tag">電子電路</span>
                     <span class="tag">嵌入式系統</span>
@@ -299,20 +359,18 @@
                     <span class="tag">HTML / CSS</span>
                     <span class="tag">GitHub</span>
                     <span class="tag" style="border-color: #555; color: #aaa;">FPGA (學習中)</span>
+                    </div>
                 </div>
-            </div>
-        </aside>
+            </aside>
 
-        <section>
-            <div class="glass-panel" style="height: 100%; box-sizing: border-box;">
-                
-                <h2 class="section-title">ABOUT_ME</h2>
-                <p style="color: #bbb; line-height: 1.8; margin-bottom: 40px; text-align: justify;">
+            <main>
+                <h2>Biography</h2>
+                <p style="line-height: 1.8; margin-bottom: 40px;">
                     您好，我是畢業於中原大學電機工程學系的學生。在大學的學習過程中，我培養出以理性分析問題並透過實作解決問題的能力，能夠透過系統設計與技術整合，並將想法轉化為實際應用。<br><br>
                     在專題研究方面，我曾參與並主導團隊完成系統開發專題，從前期規劃、硬體架構設計，到程式撰寫與系統整合，皆有實際參與與實作經驗。在學習方面，我習慣主動探索並持續精進自己的能力，透過修課習得電機領域知識與實作經驗，未來希望能在相關電子技術領域持續學習，並透過研究所累積更扎實的專業能力與研究經驗。
                 </p>
 
-                <h2 class="section-title">RESEARCH & PROJECTS</h2>
+                <h2>Research & Projects</h2>
                 
                 <div class="content-block">
                     <h3>電機系專題 : 基於影像辨識骨架技術之人體姿勢評估應用</h3>
@@ -328,10 +386,48 @@
                     <h3>微處理機實驗課專題 : 家庭安全檢測（煙霧警示）</h3>
                     <p>以微控制器結合煙霧感測器，設計一個具備聲光警報與數值回報功能的簡易居家警示系統。系統採用 HT32 微處理器搭配 MQ-135 感測模組，由 ADC 連續量測感測器輸出電壓，並將其轉換成對應的煙霧濃度指標；當量測值超過預設閾值時，系統會啟動紅色 LED 與蜂鳴器發出警示，同時透過 UART 於終端機顯示目前電壓與「警告」訊息。此外，我們利用 EXTI 外部中斷設計一個按鍵，作為系統啟動與停止的控制介面，以模擬實際家庭中使用者對設備的操作方式。</p>
                 </div>
+            </main>
+        </div>
+    </div>
 
-            </div>
-        </section>
-    </main>
+    <script>
+        // 1. 打字動畫效果
+        const headerItems = document.querySelectorAll('.header-item');
+        
+        headerItems.forEach(item => {
+            const originalText = item.getAttribute('data-type');
+            let isTyping = false;
+
+            item.addEventListener('mouseenter', () => {
+                if (isTyping) return;
+                isTyping = true;
+                item.innerText = '';
+                let i = 0;
+                const interval = setInterval(() => {
+                    if (i < originalText.length) {
+                        item.innerText += originalText[i];
+                        i++;
+                    } else {
+                        clearInterval(interval);
+                        isTyping = false;
+                    }
+                }, 50);
+            });
+        });
+
+        // 2. 當前時刻模組 (時:分:秒)
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-GB', { hour12: false });
+            const clockElement = document.getElementById('clock');
+            clockElement.setAttribute('data-type', timeStr);
+            if (!clockElement.matches(':hover')) {
+                clockElement.innerText = timeStr;
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
 
 </body>
 </html>
