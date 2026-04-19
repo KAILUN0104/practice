@@ -54,12 +54,56 @@
             display: flex;
             align-items: center;
             height: 50px;
-            overflow: hidden;
+            overflow: visible;
             white-space: nowrap;
+            position: relative;
         }
 
         .header-item:last-child {
             border-right: none;
+        }
+
+        #follow-menu {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .follow-dropdown {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 0;
+            background: var(--bg-color);
+            border: 1px solid var(--line-color);
+            border-top: none;
+            z-index: 1001;
+            min-width: 150px;
+        }
+
+        .follow-dropdown.active {
+            display: block;
+        }
+
+        .follow-dropdown-item {
+            display: block;
+            padding: 12px 15px;
+            color: var(--text-color);
+            text-decoration: none;
+            border-bottom: 1px solid var(--line-color);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 300;
+            white-space: nowrap;
+            transition: var(--transition-smooth);
+        }
+
+        .follow-dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .follow-dropdown-item:hover {
+            background: #F5F5F5;
         }
 
         /* --- 2 & 5. 內容調整與字體混合 --- */
@@ -160,10 +204,17 @@
 <body>
 
     <header>
-        <div class="header-item" data-type="HOME">HOME</div>
+        <div class="header-item" onclick="window.location.href='index.html'" data-type="HOME" style="cursor: pointer;">HOME</div>
         <div class="header-item" id="clock" data-type="TIME">00:00:00</div>
         <div class="header-item" data-type="TAIPEI / TAIWAN">TAIPEI / TAIWAN</div>
-        <div class="header-item" data-type="FOLLOW">FOLLOW + </div>
+        
+        <div class="header-item" id="follow-menu" data-type="FOLLOW +">
+            <span class="type-text">FOLLOW +</span>
+            <div class="follow-dropdown">
+                <a href="https://www.instagram.com/kk1ro4/" target="_blank" class="follow-dropdown-item">Link of IG</a>
+            </div>
+        </div>
+        
         <div class="header-item" data-type="CREATE BY LIN KAI-LUN">CREATE BY LIN KAI-LUN</div>
     </header>
 
@@ -179,32 +230,32 @@
             <a href="classpractice.html" class="card">
                 <div class="card-num">01 / ARCHIVE</div>
                 <div class="card-title">Class<br>Practice</div>
-                <div class="card-desc">Technical evolution records from fundamental logic to complex layouts.</div>
+                <div class="card-desc">Record the content of daily class exercises.</div>
             </a>
 
             <a href="profile.html" class="card">
                 <div class="card-num">02 / IDENTITY</div>
                 <div class="card-title">About<br>Me</div>
-                <div class="card-desc">Exploring the balance between minimalism and functionalism.</div>
+                <div class="card-desc">Website for personal profile.</div>
             </a>
 
             <a href="project.html" class="card">
                 <div class="card-num">03 / OUTPUT</div>
                 <div class="card-title">Final<br>Product</div>
-                <div class="card-desc">Precise digital solutions transformed from pure design concepts.</div>
+                <div class="card-desc">A website that provides second-hand treding.</div>
             </a>
 
             <a href="test.html" class="card">
                 <div class="card-num">04 / LAB</div>
-                <div class="card-title">Sandbox<br>Test</div>
-                <div class="card-desc">Uncharted visual experiments and dynamic technology testing.</div>
+                <div class="card-title">Testing<br></div>
+                <div class="card-desc">Unfinished projects.</div>
             </a>
         </section>
 
         <section class="manifesto">
             <h2>Design Philosophy</h2>
             <p>
-                We reject decorative mediocrity. Power resides in structural rigor and typographic tension. A declaration of digital purity[cite: 2, 8].
+                This website was designed by an individual and completed wuth the assistance of AI.
             </p>
         </section>
     </div>
@@ -217,14 +268,19 @@
             const originalText = item.getAttribute('data-type');
             let isTyping = false;
 
+            // 關鍵修改：尋找內部是否有特別包裝的文字節點 (針對下拉選單)，如果沒有就選自己
+            const targetNode = item.querySelector('.type-text') || item;
+
             item.addEventListener('mouseenter', () => {
-                if (isTyping) return;
+                if (isTyping || !originalText) return;
                 isTyping = true;
-                item.innerText = '';
+                
+                // 這裡只會清空 targetNode (span 或 div)，不會再誤刪 dropdown
+                targetNode.innerText = '';
                 let i = 0;
                 const interval = setInterval(() => {
                     if (i < originalText.length) {
-                        item.innerText += originalText[i];
+                        targetNode.innerText += originalText[i];
                         i++;
                     } else {
                         clearInterval(interval);
@@ -246,6 +302,19 @@
         }
         setInterval(updateClock, 1000);
         updateClock();
+
+        // 3. FOLLOW+ 下拉菜單功能
+        const followMenu = document.getElementById('follow-menu');
+        const followDropdown = followMenu.querySelector('.follow-dropdown');
+
+        followMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+            followDropdown.classList.toggle('active');
+        });
+
+        document.addEventListener('click', () => {
+            followDropdown.classList.remove('active');
+        });
     </script>
 </body>
 </html>
