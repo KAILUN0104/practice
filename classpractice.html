@@ -544,11 +544,22 @@
         // 自動生成未來的空日期
         const futureDates = [ '04/16', '04/23', '04/30', '05/07', '05/14', '05/21', '05/28', '06/04'];
         futureDates.forEach(date => {
-            const topic = date === '06/04' ? '期末統整與專題' : '每週練習主題';
+            let topic = date === '06/04' ? '期末統整與專題' : '每週練習主題';
+            let content = `<div class="empty-state">尚無內容 DATA PENDING</div>`;
+            
+            // 針對 04/16 特別處理
+            if (date === '04/16') {
+                topic = 'Vue基本練習';
+                content = `
+                    <p class="desc">Vue.js 基礎架構練習，涵蓋聲明式渲染、屬性綁定、事件監聽、表單綁定、條件渲染與清單渲染等核心概念。</p>
+                    <iframe src="0416.html" width="100%" height="800" style="border:1px solid var(--line-color); border-radius: 0;"></iframe>
+                `;
+            }
+            
             courseData.push({
                 date: date,
                 topic: topic,
-                content: `<div class="empty-state">尚無內容 DATA PENDING</div>`
+                content: content
             });
         });
 
